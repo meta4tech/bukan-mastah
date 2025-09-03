@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUKAN MASTAH</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 40px;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .menu-toggle {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        
+        .menu-toggle span {
+            height: 3px;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+        
+        .menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100vh;
+            background: rgba(26, 42, 108, 0.95);
+            padding: 80px 20px 20px;
+            transition: right 0.3s ease;
+            z-index: 999;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .menu.active {
+            right: 0;
+        }
+        
+        .menu ul {
+            list-style: none;
+        }
+        
+        .menu ul li {
+            margin-bottom: 15px;
+        }
+        
+        .menu ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            display: block;
+            padding: 12px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+        
+        .menu ul li a:hover {
+            background: rgba(178, 31, 31, 0.7);
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 998;
+        }
+        
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .close-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+        }
+        
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero p {
+            font-size: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        
+        .feature-card p {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #fdbb2d;
+            color: #1a2a6c;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #ffcc44;
+            transform: scale(1.05);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">BUKAN MASTAH</div>
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </header>
+        
+        <div class="menu" id="menu">
+            <div class="close-menu" id="closeMenu">✕</div>
+            <ul>
+                <li><a href="bmwhatsapp-download.html">Download BMWhatsApp</a></li>
+                <li><a href="scripbot-download.html">Download Script Bot</a></li>
+                <li><a href="method-download.html">Download Source Kode WA</a></li>
+                <li><a href="bmwhatsapp-reseller.html">Opsi Reseller BMWhatsApp</a></li>
+            </ul>
+        </div>
+        
+        <div class="overlay" id="overlay"></div>
+        
+        <section class="hero">
+            <h1>BUKAN MASTAH</h1>
+            <p>Platform terdepan untuk kebutuhan modifikasi WhatsApp, script bot, dan peluang bisnis reseller. Dapatkan pengalaman WhatsApp yang lebih baik dengan tools kami.</p>
+        </section>
+        
+        <section class="features">
+            <div class="feature-card">
+                <h3>BMWhatsApp</h3>
+                <p>Versi modifikasi WhatsApp dengan fitur tambahan dan peningkatan privasi.</p>
+                <a href="bmwhatsapp-download.html" class="btn">Download Sekarang</a>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Script Bot</h3>
+                <p>Automasi percakapan dan tugas dengan script bot WhatsApp yang canggih.</p>
+                <a href="scripbot-download.html" class="btn">Download Script</a>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Source Code</h3>
+                <p>Source code WhatsApp modifikasi untuk pengembangan dan pembelajaran.</p>
+                <a href="method-download.html" class="btn">Download Method</a>
+            </div>
+            
+            <div class="feature-card">
+                <h3>Reseller</h3>
+                <p>Bergabunglah sebagai reseller bmwhatsapp.</p>
+                <a href="bmwhatsapp-reseller.html" class="btn">Daftar Reseller</a>
+            </div>
+        </section>
+        
+        <footer>
+            <p>&copy; 2023 BUKAN MASTAH. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menuToggle');
+            const menu = document.getElementById('menu');
+            const overlay = document.getElementById('overlay');
+            const closeMenu = document.getElementById('closeMenu');
+            
+            menuToggle.addEventListener('click', function() {
+                menu.classList.add('active');
+                overlay.classList.add('active');
+            });
+            
+            closeMenu.addEventListener('click', function() {
+                menu.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+            
+            overlay.addEventListener('click', function() {
+                menu.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Script Bot WhatsApp - BUKAN MASTAH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: #fdbb2d;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            margin-bottom: 10px;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .page-title h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .page-title p {
+            font-size: 18px;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background: #fdbb2d;
+            color: #1a2a6c;
+        }
+        
+        .scripts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .script-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .script-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .script-thumb {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .script-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .script-card:hover .script-thumb img {
+            transform: scale(1.05);
+        }
+        
+        .preview-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(253, 187, 45, 0.9);
+            color: #1a2a6c;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0.9;
+        }
+        
+        .preview-btn:hover {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        
+        .preview-btn i {
+            font-size: 20px;
+        }
+        
+        .script-info {
+            padding: 25px;
+        }
+        
+        .script-info h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #fdbb2d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .script-type {
+            font-size: 14px;
+            background: rgba(253, 187, 45, 0.2);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        
+        .script-info p {
+            margin-bottom: 20px;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+        
+        .script-features {
+            margin-bottom: 20px;
+        }
+        
+        .script-features li {
+            margin-bottom: 8px;
+            list-style-type: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .script-features li i {
+            color: #fdbb2d;
+            margin-right: 10px;
+        }
+        
+        .script-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .download-btn {
+            display: block;
+            text-align: center;
+            background: #fdbb2d;
+            color: #1a2a6c;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            flex: 2;
+        }
+        
+        .download-btn:hover {
+            background: #ffcc44;
+            transform: scale(1.03);
+        }
+        
+        .preview-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+        
+        .preview-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .info-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .info-box h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #fdbb2d;
+        }
+        
+        .info-box p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .info-box ul {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-box ul li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .warning {
+            background: rgba(178, 31, 31, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .requirements {
+            background: rgba(26, 42, 108, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            margin-top: 40px;
+        }
+        
+        /* Modal untuk link external */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: #1a2a6c;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .modal-content h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #fdbb2d;
+        }
+        
+        .modal-content p {
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .modal-btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-btn.confirm {
+            background: #fdbb2d;
+            color: #1a2a6c;
+        }
+        
+        .modal-btn.confirm:hover {
+            background: #ffcc44;
+        }
+        
+        .modal-btn.cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        
+        .modal-btn.cancel:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .page-title h1 {
+                font-size: 32px;
+            }
+            
+            .page-title p {
+                font-size: 16px;
+            }
+            
+            .scripts {
+                grid-template-columns: 1fr;
+            }
+            
+            .script-actions {
+                flex-direction: column;
+            }
+            
+            .modal-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-robot"></i> BUKAN MASTAH
+            </div>
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Kembali ke Home
+            </a>
+        </header>
+        
+        <section class="page-title">
+            <h1>Download Script Bot WhatsApp</h1>
+            <p>Pilih script bot WhatsApp yang sesuai dengan kebutuhan Anda. Setiap script memiliki fitur unggulan yang berbeda untuk automasi percakapan dan manajemen pesan.</p>
+        </section>
+        
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">Semua Script</button>
+            <button class="filter-btn" data-filter="nodejs">Node.js</button>
+            <button class="filter-btn" data-filter="python">Python</button>
+            <button class="filter-btn" data-filter="baileys">Baileys</button>
+        </div>
+        
+        <div class="scripts">
+            <div class="script-card" data-category="nodejs">
+                <div class="script-thumb">
+                    <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=900&q=80" alt="Bot WhatsApp Node.js">
+                    <div class="preview-btn" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="script-info">
+                    <h3>Bot WA Node.js <span class="script-type">Node.js</span></h3>
+                    <p>Script bot WhatsApp berbasis Node.js dengan fitur lengkap untuk automasi percakapan dan pengelolaan pesan.</p>
+                    <ul class="script-features">
+                        <li><i class="fas fa-check"></i> Auto Reply & Broadcast</li>
+                        <li><i class="fas fa-check"></i> Media Downloader</li>
+                        <li><i class="fas fa-check"></i> Database Support</li>
+                        <li><i class="fas fa-check"></i> Multi Device</li>
+                    </ul>
+                    <div class="script-actions">
+                        <a href="#" class="download-btn" data-link="https://www.mediafire.com/file/nodejs-bot-wa.zip/file">Download</a>
+                        <a href="https://www.youtube.com/embed/dQw4w9WgXcQ" class="preview-link" data-fancybox>
+                            <i class="fas fa-video"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="script-card" data-category="python">
+                <div class="script-thumb">
+                    <img src="https://images.unsplash.com/photo-1526379879527-8559ecfcaec0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=900&q=80" alt="Bot WhatsApp Python">
+                    <div class="preview-btn" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="script-info">
+                    <h3>Bot WA Python <span class="script-type">Python</span></h3>
+                    <p>Script bot WhatsApp berbasis Python dengan library selenium untuk automasi yang powerful dan mudah dikustomisasi.</p>
+                    <ul class="script-features">
+                        <li><i class="fas fa-check"></i> Selenium WebDriver</li>
+                        <li><i class="fas fa-check"></i> Multi-threading</li>
+                        <li><i class="fas fa-check"></i> CSV Data Support</li>
+                        <li><i class="fas fa-check"></i> Image Recognition</li>
+                    </ul>
+                    <div class="script-actions">
+                        <a href="#" class="download-btn" data-link="https://www.mediafire.com/file/python-bot-wa.zip/file">Download</a>
+                        <a href="https://www.youtube.com/embed/dQw4w9WgXcQ" class="preview-link" data-fancybox>
+                            <i class="fas fa-video"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="script-card" data-category="baileys">
+                <div class="script-thumb">
+                    <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=900&q=80" alt="Bot WhatsApp Baileys">
+                    <div class="preview-btn" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="script-info">
+                    <h3>Bot WA Baileys <span class="script-type">Baileys</span></h3>
+                    <p>Script bot WhatsApp menggunakan library Baileys, lightweight dan tanpa dependency browser untuk performa optimal.</p>
+                    <ul class="script-features">
+                        <li><i class="fas fa-check"></i> No Browser Required</li>
+                        <li><i class="fas fa-check"></i> High Performance</li>
+                        <li><i class="fas fa-check"></i> Easy Deployment</li>
+                        <li><i class="fas fa-check"></i> WebSocket Connection</li>
+                    </ul>
+                    <div class="script-actions">
+                        <a href="#" class="download-btn" data-link="https://www.mediafire.com/file/baileys-bot-wa.zip/file">Download</a>
+                        <a href="https://www.youtube.com/embed/dQw4w9WgXcQ" class="preview-link" data-fancybox>
+                            <i class="fas fa-video"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="script-card" data-category="nodejs">
+                <div class="script-thumb">
+                    <img src="https://images.unsplash.com/photo-1546054454-aa26e2b734c7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=900&q=80" alt="Bot WhatsApp Multi Device">
+                    <div class="preview-btn" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="script-info">
+                    <h3>Bot WA MD <span class="script-type">Node.js</span></h3>
+                    <p>Script bot WhatsApp Multi Device dengan kemampuan menjalankan beberapa akun sekaligus dalam satu server.</p>
+                    <ul class="script-features">
+                        <li><i class="fas fa-check"></i> Multi Account</li>
+                        <li><i class="fas fa-check"></i> Plugin System</li>
+                        <li><i class="fas fa-check"></i> Dashboard Web</li>
+                        <li><i class="fas fa-check"></i> REST API</li>
+                    </ul>
+                    <div class="script-actions">
+                        <a href="#" class="download-btn" data-link="https://www.mediafire.com/file/md-bot-wa.zip/file">Download</a>
+                        <a href="https://www.youtube.com/embed/dQw4w9WgXcQ" class="preview-link" data-fancybox>
+                            <i class="fas fa-video"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <h2>Panduan Instalasi</h2>
+            <p>Sebelum menggunakan script bot WhatsApp, pastikan untuk mengikuti panduan berikut:</p>
+            
+            <ul>
+                <li><strong>Persyaratan Sistem</strong>: Pastikan Node.js/Python sudah terinstall di perangkat Anda</li>
+                <li><strong>Dependencies</strong>: Install semua dependencies yang diperlukan dengan perintah <code>npm install</code> atau <code>pip install</code></li>
+                <li><strong>Konfigurasi</strong>: Edit file config sesuai dengan kebutuhan Anda</li>
+                <li><strong>Jalankan Bot</strong>: Gunakan perintah <code>npm start</code> atau <code>python main.py</code> untuk menjalankan bot</li>
+            </ul>
+            
+            <div class="requirements">
+                <h3>Persyaratan Sistem:</h3>
+                <ul>
+                    <li>Node.js v16+ (untuk script Node.js)</li>
+                    <li>Python 3.8+ (untuk script Python)</li>
+                    <li>RAM Minimal 2GB</li>
+                    <li>Koneksi Internet Stabil</li>
+                </ul>
+            </div>
+            
+            <div class="warning">
+                <p><strong>Peringatan</strong>: Penggunaan bot WhatsApp mungkin melanggar ketentuan layanan WhatsApp. Gunakan dengan bijak dan bertanggung jawab. Kami tidak bertanggung jawab atas segala bentuk banned akun.</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2023 BUKAN MASTAH. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Modal untuk konfirmasi download -->
+    <div class="modal" id="downloadModal">
+        <div class="modal-content">
+            <h3>Download Script Bot</h3>
+            <p>Anda akan meninggalkan halaman ini dan diarahkan ke MediaFire untuk mengunduh file script. Apakah Anda ingin melanjutkan?</p>
+            <div class="modal-buttons">
+                <a href="#" class="modal-btn confirm" id="confirmDownload">Ya, Download</a>
+                <button class="modal-btn cancel" id="cancelDownload">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    <script>
+        // Initialize Fancybox
+        Fancybox.bind("[data-fancybox]", {
+            // Your custom options
+        });
+        
+        // Filter functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const scriptCards = document.querySelectorAll('.script-card');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const filter = this.getAttribute('data-filter');
+                    
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Filter cards
+                    scriptCards.forEach(card => {
+                        if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Preview button functionality
+            const previewButtons = document.querySelectorAll('.preview-btn');
+            previewButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const videoUrl = this.getAttribute('data-video');
+                    Fancybox.show([{
+                        src: videoUrl,
+                        type: "iframe"
+                    }]);
+                });
+            });
+            
+            // Download button functionality dengan modal konfirmasi
+            const downloadButtons = document.querySelectorAll('.download-btn');
+            const downloadModal = document.getElementById('downloadModal');
+            const confirmDownload = document.getElementById('confirmDownload');
+            const cancelDownload = document.getElementById('cancelDownload');
+            let currentDownloadLink = '';
+            
+            downloadButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Dapatkan link download dari atribut data
+                    currentDownloadLink = this.getAttribute('data-link');
+                    
+                    // Tampilkan modal konfirmasi
+                    downloadModal.style.display = 'flex';
+                });
+            });
+            
+            // Konfirmasi download
+            confirmDownload.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Redirect ke link download
+                window.open(currentDownloadLink, '_blank');
+                
+                // Sembunyikan modal
+                downloadModal.style.display = 'none';
+            });
+            
+            // Batal download
+            cancelDownload.addEventListener('click', function() {
+                // Sembunyikan modal
+                downloadModal.style.display = 'none';
+            });
+            
+            // Tutup modal jika klik di luar konten modal
+            window.addEventListener('click', function(e) {
+                if (e.target === downloadModal) {
+                    downloadModal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
