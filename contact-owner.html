@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontak Owner Asli</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .header {
+            background: linear-gradient(to right, #2c3e50, #4a6491);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #f9a826, #f56b2a);
+        }
+        
+        .header-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .alert-box {
+            background-color: #fff9e6;
+            border-left: 5px solid #f9a826;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .alert-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .alert-icon {
+            color: #f9a826;
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        
+        .alert-title h3 {
+            font-size: 1.3rem;
+            color: #333;
+            font-weight: 700;
+        }
+        
+        .alert-text {
+            color: #555;
+            font-size: 1.05rem;
+        }
+        
+        .warning-text {
+            color: #d35400;
+            font-weight: 600;
+        }
+        
+        .contact-section {
+            margin-top: 40px;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+        
+        .section-icon {
+            background-color: #4a6491;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .section-title h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .contact-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .contact-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #eaeaea;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-card:hover {
+            background-color: #eef5ff;
+            transform: translateY(-5px);
+            border-color: #4a6491;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .contact-card-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eaeaea;
+        }
+        
+        .contact-card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .telegram-color {
+            background: linear-gradient(to right, #0088cc, #34b7f1);
+        }
+        
+        .whatsapp-color {
+            background: linear-gradient(to right, #25d366, #128c7e);
+        }
+        
+        .contact-card-title h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .contact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: white;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid #eaeaea;
+        }
+        
+        .contact-item:hover {
+            background-color: #f0f7ff;
+            transform: translateX(5px);
+            border-color: #4a6491;
+        }
+        
+        .contact-type {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+            text-transform: uppercase;
+        }
+        
+        .owner-type {
+            background-color: #ffecb3;
+            color: #d35400;
+        }
+        
+        .channel-type {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .contact-info h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        
+        .contact-info p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .contact-icon-small {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            background-color: #f8f9fa;
+        }
+        
+        .highlight {
+            background-color: #fff9e6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #d35400;
+        }
+        
+        .info-note {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #e8f4fd;
+            border-radius: 10px;
+            border-left: 4px solid #4a6491;
+            font-size: 0.95rem;
+            color: #2c3e50;
+        }
+        
+        .info-note strong {
+            color: #d35400;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                padding: 25px;
+            }
+            
+            .header {
+                padding: 25px 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .contact-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .alert-text {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .header-icon {
+                font-size: 2.8rem;
+            }
+            
+            .contact-card {
+                padding: 20px;
+            }
+            
+            .contact-item {
+                flex-direction: column;
+                text-align: center;
+                padding: 12px;
+            }
+            
+            .contact-info h4 {
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <span class="header-icon">📢</span>
+                <h1>PERHATIAN!</h1>
+                <p>Ini adalah kontak owner asli <span class="highlight">BUKAN MASTAH</span>. Selain dari kontak ini berarti <span class="highlight">clone / palsu</span>.</p>
+            </div>
+            
+            <div class="content">
+                <div class="alert-box">
+                    <div class="alert-title">
+                        <span class="alert-icon">⚠️</span>
+                        <h3>Informasi Penting</h3>
+                    </div>
+                    <p class="alert-text">
+                        Jika membutuhkan bantuan atau ingin menanyakan sesuatu, silakan hubungi kontak di bawah ini. Pastikan Anda hanya menghubungi kontak yang tercantum di halaman ini untuk menghindari penipuan.
+                    </p>
+                </div>
+                
+                <div class="contact-section">
+                    <div class="section-title">
+                        <div class="section-icon">
+                            <i class="fas fa-address-book"></i>
+                        </div>
+                        <h2>Contact Owner & Saluran Resmi</h2>
+                    </div>
+                    
+                    <div class="contact-options">
+                        <!-- Telegram Card -->
+                        <div class="contact-card">
+                            <div class="contact-card-title">
+                                <div class="contact-card-icon telegram-color">
+                                    <i class="fab fa-telegram"></i>
+                                </div>
+                                <h3>Telegram</h3>
+                            </div>
+                            
+                            <div class="contact-list">
+                                <a href="https://t.me/bukan_mastah_owner" target="_blank" class="contact-item">
+                                    <div class="contact-info">
+                                        <h4>
+                                            <span class="contact-icon-small"><i class="fab fa-telegram"></i></span>
+                                            Owner Telegram
+                                            <span class="contact-type owner-type">Owner</span>
+                                        </h4>
+                                        <p>t.me/bukan_mastah_owner</p>
+                                        <p>Hubungi langsung untuk keperluan penting dan privat</p>
+                                    </div>
+                                </a>
+                                
+                                <a href="https://t.me/bukan_mastah_channel" target="_blank" class="contact-item">
+                                    <div class="contact-info">
+                                        <h4>
+                                            <span class="contact-icon-small"><i class="fab fa-telegram"></i></span>
+                                            Saluran Telegram
+                                            <span class="contact-type channel-type">Channel</span>
+                                        </h4>
+                                        <p>t.me/bukan_mastah_channel</p>
+                                        <p>Bergabung untuk informasi terbaru dan pengumuman resmi</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- WhatsApp Card -->
+                        <div class="contact-card">
+                            <div class="contact-card-title">
+                                <div class="contact-card-icon whatsapp-color">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                                <h3>WhatsApp</h3>
+                            </div>
+                            
+                            <div class="contact-list">
+                                <a href="https://wa.me/message/GJOAHAJO2MIVK1" target="_blank" class="contact-item">
+                                    <div class="contact-info">
+                                        <h4>
+                                            <span class="contact-icon-small"><i class="fab fa-whatsapp"></i></span>
+                                            Owner WhatsApp
+                                            <span class="contact-type owner-type">Owner</span>
+                                        </h4>
+                                        <p>+62 812-XXXX-XXXX</p>
+                                        <p>Hubungi langsung untuk konsultasi dan bantuan personal</p>
+                                    </div>
+                                </a>
+                                
+                                <a href="https://whatsapp.com/channel/0029VagP4jcBKfiApzzTqU03" target="_blank" class="contact-item">
+                                    <div class="contact-info">
+                                        <h4>
+                                            <span class="contact-icon-small"><i class="fab fa-whatsapp"></i></span>
+                                            Saluran WhatsApp
+                                            <span class="contact-type channel-type">Channel</span>
+                                        </h4>
+                                        <p>chat.whatsapp.com/XXXXXXX</p>
+                                        <p>Bergabung dengan Saluran untuk mendapatkan informasi</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-note">
+                        <p><strong>Perbedaan Owner dan Saluran:</strong> Owner adalah kontak pribadi untuk keperluan penting, sedangkan Saluran adalah untuk informasi umum, pengumuman, dan diskusi komunitas.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p>© 2025 Kontak Resmi Owner BUKAN MASTAH.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Menambahkan efek animasi saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            const card = document.querySelector('.card');
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100);
+            
+            // Animasi untuk kontak cards
+            const contactCards = document.querySelectorAll('.contact-card');
+            contactCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 200 + (index * 150));
+            });
+            
+            // Menambahkan konfirmasi sebelum membuka link
+            const contactLinks = document.querySelectorAll('.contact-item');
+            contactLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const platform = this.closest('.contact-card').querySelector('h3').textContent;
+                    const contactType = this.querySelector('.contact-type').textContent;
+                    const confirmed = confirm(`Anda akan dialihkan ke ${contactType} ${platform}. Lanjutkan?`);
+                    
+                    if (!confirmed) {
+                        e.preventDefault();
+                    }
+                });
+            });
+            
+            // Efek hover tambahan
+            const contactItems = document.querySelectorAll('.contact-item');
+            contactItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const type = this.querySelector('.contact-type');
+                    if (type.classList.contains('owner-type')) {
+                        type.style.transform = 'scale(1.1)';
+                        type.style.transition = 'transform 0.2s ease';
+                    }
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    const type = this.querySelector('.contact-type');
+                    if (type.classList.contains('owner-type')) {
+                        type.style.transform = 'scale(1)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
