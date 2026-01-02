@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download Source Code WhatsApp - BUKAN MASTAH</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Source Code Coming Soon - BUKAN MASTAH</title>
     <style>
         * {
             margin: 0;
@@ -17,642 +16,329 @@
             background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
             color: #fff;
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
         }
         
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-            margin-bottom: 40px;
-            flex-wrap: wrap;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 60px 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
         }
         
         .logo {
-            font-size: 28px;
+            font-size: 36px;
             font-weight: bold;
-            color: #fff;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .logo i {
-            margin-right: 10px;
+            margin-bottom: 30px;
             color: #fdbb2d;
-        }
-        
-        .back-btn {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            margin-bottom: 10px;
-        }
-        
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-        
-        .page-title {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        
-        .page-title h1 {
-            font-size: 42px;
-            margin-bottom: 15px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         
-        .page-title p {
-            font-size: 18px;
-            max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.6;
-            opacity: 0.9;
-        }
-        
-        .filter-buttons {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 40px;
-        }
-        
-        .filter-btn {
-            background: rgba(255, 255, 255, 0.1);
+        .coming-soon-title {
+            font-size: 48px;
+            margin-bottom: 20px;
             color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         
-        .filter-btn.active, .filter-btn:hover {
-            background: #fdbb2d;
-            color: #1a2a6c;
-        }
-        
-        .sources {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-        
-        .source-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .source-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        .source-thumb {
-            width: 100%;
-            height: 200px;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .source-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        
-        .source-card:hover .source-thumb img {
-            transform: scale(1.05);
-        }
-        
-        .preview-btn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(253, 187, 45, 0.9);
-            color: #1a2a6c;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            opacity: 0.9;
-        }
-        
-        .preview-btn:hover {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1.1);
-        }
-        
-        .preview-btn i {
+        .subtitle {
             font-size: 20px;
-        }
-        
-        .source-info {
-            padding: 25px;
-        }
-        
-        .source-info h3 {
-            font-size: 22px;
-            margin-bottom: 15px;
-            color: #fdbb2d;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .source-type {
-            font-size: 14px;
-            background: rgba(253, 187, 45, 0.2);
-            padding: 4px 10px;
-            border-radius: 20px;
-        }
-        
-        .source-info p {
-            margin-bottom: 20px;
-            line-height: 1.5;
+            margin-bottom: 40px;
+            line-height: 1.6;
             opacity: 0.9;
         }
         
-        .source-features {
-            margin-bottom: 20px;
-        }
-        
-        .source-features li {
-            margin-bottom: 8px;
-            list-style-type: none;
-            display: flex;
-            align-items: center;
-        }
-        
-        .source-features li i {
-            color: #fdbb2d;
-            margin-right: 10px;
-        }
-        
-        .source-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .download-btn {
-            display: block;
-            text-align: center;
-            background: #fdbb2d;
-            color: #1a2a6c;
-            padding: 12px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            flex: 2;
-        }
-        
-        .download-btn:hover {
-            background: #ffcc44;
-            transform: scale(1.03);
-        }
-        
-        .preview-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            padding: 12px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            flex: 1;
-        }
-        
-        .preview-link:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .info-box {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 30px;
+        .icon-container {
             margin-bottom: 40px;
-            backdrop-filter: blur(10px);
         }
         
-        .info-box h2 {
-            font-size: 28px;
-            margin-bottom: 20px;
+        .icon {
+            font-size: 80px;
             color: #fdbb2d;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
         }
         
-        .info-box p {
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px 15px;
+            border-radius: 10px;
+            min-width: 100px;
+        }
+        
+        .countdown-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #fdbb2d;
+            margin-bottom: 5px;
+        }
+        
+        .countdown-label {
+            font-size: 14px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+        
+        .description {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+        
+        .description h3 {
+            color: #fdbb2d;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        
+        .description p {
             margin-bottom: 15px;
             line-height: 1.6;
         }
         
-        .info-box ul {
+        .description ul {
             padding-left: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
-        .info-box ul li {
-            margin-bottom: 10px;
+        .description li {
+            margin-bottom: 8px;
             line-height: 1.5;
         }
         
-        .warning {
-            background: rgba(178, 31, 31, 0.3);
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-        
-        .requirements {
-            background: rgba(26, 42, 108, 0.3);
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 30px 0;
-            border-top: 2px solid rgba(255, 255, 255, 0.2);
-            margin-top: 40px;
-        }
-        
-        /* Modal untuk link external */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-content {
-            background: #1a2a6c;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-        }
-        
-        .modal-content h3 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #fdbb2d;
-        }
-        
-        .modal-content p {
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-        
-        .modal-buttons {
+        .cta-buttons {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
         }
         
-        .modal-btn {
-            padding: 12px 25px;
-            border-radius: 8px;
+        .btn {
+            display: inline-block;
+            background: #fdbb2d;
+            color: #1a2a6c;
+            padding: 15px 30px;
+            border-radius: 50px;
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s ease;
+            min-width: 180px;
         }
         
-        .modal-btn.confirm {
-            background: #fdbb2d;
-            color: #1a2a6c;
-        }
-        
-        .modal-btn.confirm:hover {
+        .btn:hover {
             background: #ffcc44;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
         
-        .modal-btn.cancel {
-            background: rgba(255, 255, 255, 0.1);
+        .btn-secondary {
+            background: transparent;
             color: #fff;
+            border: 2px solid #fdbb2d;
         }
         
-        .modal-btn.cancel:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .btn-secondary:hover {
+            background: rgba(253, 187, 45, 0.1);
+        }
+        
+        .notification {
+            background: rgba(253, 187, 45, 0.2);
+            border-left: 4px solid #fdbb2d;
+            padding: 15px;
+            margin-top: 30px;
+            border-radius: 5px;
+            text-align: left;
+        }
+        
+        .notification strong {
+            color: #fdbb2d;
         }
         
         @media (max-width: 768px) {
-            .page-title h1 {
-                font-size: 32px;
+            .container {
+                padding: 40px 20px;
             }
             
-            .page-title p {
-                font-size: 16px;
+            .coming-soon-title {
+                font-size: 36px;
             }
             
-            .sources {
-                grid-template-columns: 1fr;
+            .subtitle {
+                font-size: 18px;
             }
             
-            .source-actions {
+            .countdown {
+                gap: 10px;
+            }
+            
+            .countdown-item {
+                min-width: 80px;
+                padding: 15px 10px;
+            }
+            
+            .countdown-number {
+                font-size: 28px;
+            }
+            
+            .cta-buttons {
                 flex-direction: column;
+                align-items: center;
             }
             
-            .modal-buttons {
-                flex-direction: column;
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .coming-soon-title {
+                font-size: 28px;
+            }
+            
+            .countdown-item {
+                min-width: 70px;
+                padding: 12px 8px;
+            }
+            
+            .countdown-number {
+                font-size: 24px;
+            }
+            
+            .countdown-label {
+                font-size: 12px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <div class="logo">
-                <i class="fab fa-whatsapp"></i> BUKAN MASTAH
-            </div>
-            <a href="index.html" class="back-btn">
-                <i class="fas fa-arrow-left"></i> Kembali ke Home
-            </a>
-        </header>
+        <div class="logo">BUKAN MASTAH</div>
         
-        <section class="page-title">
-            <h1>Download Source Code WhatsApp</h1>
-            <p>Koleksi source code WhatsApp modifikasi untuk keperluan development dan pembelajaran. Pilih source code yang sesuai dengan kebutuhan Anda.</p>
-        </section>
-        
-        <div class="filter-buttons">
-            <button class="filter-btn active" data-filter="all">Semua Source Code</button>
-            <button class="filter-btn" data-filter="mod">Modifikasi</button>
-            <button class="filter-btn" data-filter="bot">Bot</button>
-            <button class="filter-btn" data-filter="api">API</button>
+        <div class="icon-container">
+            <div class="icon">📦</div>
         </div>
         
-        <div class="sources">
-            <div class="source-card" data-category="mod">
-                <div class="source-thumb">
-                    <img src="https://images.unsplash.com/photo-1611606063065-ee794e1ffa0b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=900&q=80" alt="Source Code WhatsApp Mod">
-                    <div class="preview-btn" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ">
-                        <i class="fas fa-play"></i>
-                    </div>
-                </div>
-                <div class="source-info">
-                    <h3>WhatsApp Mod <span class="source-type">Modifikasi</span></h3>
-                    <p>Source code WhatsApp modifikasi dengan fitur tambahan seperti tema kustom, privacy enhanced, dan anti-revoke.</p>
-                    <ul class="source-features">
-                        <li><i class="fas fa-check"></i> Custom Theme Engine</li>
-                        <li><i class="fas fa-check"></i> Privacy Options</li>
-                        <li><i class="fas fa-check"></i> Anti-Revoke Message</li>
-                        <li><i class="fas fa-check"></i> Hide Online Status</li>
-                    </ul>
-                    <div class="source-actions">
-                        <a href="#" class="download-btn" data-link="https://www.mediafire.com/file/whatsapp-mod-source.zip/file">Download</a>
-                        <a href="https://www.youtube.com/embed/dQw4w9WgXcQ" class="preview-link" data-fancybox>
-                            <i class="fas fa-video"></i>
-                        </a>
-                    </div>
-                </div>
+        <h1 class="coming-soon-title">SOURCE CODE COMING SOON</h1>
+        
+        <p class="subtitle">Kami sedang menyiapkan source code WhatsApp modifikasi terbaik untuk Anda. Tunggu sebentar ya!</p>
+        
+        <div class="countdown">
+            <div class="countdown-item">
+                <div class="countdown-number" id="days">00</div>
+                <div class="countdown-label">Hari</div>
             </div>
-            
-            <div class="source-card" data-category="bot">
-                <div class="source-thumb">
-                    <img src="https://images.unsplash.com/photo-1546054454-aa26e2b734c7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=900&q=80" alt="Source Code Bot WhatsApp">
-                    <div class="preview-btn" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ">
-                        <i class="fas fa-play"></i>
-                    </div>
-                </div>
-                <div class="source-info">
-                    <h3>WhatsApp Bot <span class="source-type">Bot</span></h3>
-                    <p>Source code bot WhatsApp lengkap dengan fitur auto-reply, broadcast message, dan integrasi database.</p>
-                    <ul class="source-features">
-                        <li><i class="fas fa-check"></i> Auto Reply System</li>
-                        <li><i class="fas fa-check"></i> Broadcast Message</li>
-                        <li><i class="fas fa-check"></i> MySQL Database</li>
-                        <li><i class="fas fa-check"></i> Multi Device Support</li>
-                    </ul>
-                    <div class="source-actions">
-                        <a href="#" class="download-btn" data-link="https://www.mediafire.com/file/whatsapp-bot-source.zip/file">Download</a>
-                        <a href="https://www.youtube.com/embed/dQw4w9WgXcQ" class="preview-link" data-fancybox>
-                            <i class="fas fa-video"></i>
-                        </a>
-                    </div>
-                </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="hours">00</div>
+                <div class="countdown-label">Jam</div>
             </div>
-            
-            <div class="source-card" data-category="api">
-                <div class="source-thumb">
-                    <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=900&q=80" alt="Source Code WhatsApp API">
-                    <div class="preview-btn" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ">
-                        <i class="fas fa-play"></i>
-                    </div>
-                </div>
-                <div class="source-info">
-                    <h3>WhatsApp API <span class="source-type">API</span></h3>
-                    <p>Source code WhatsApp API gateway untuk integrasi dengan sistem lain seperti CRM, ERP, atau aplikasi custom.</p>
-                    <ul class="source-features">
-                        <li><i class="fas fa-check"></i> RESTful API</li>
-                        <li><i class="fas fa-check"></i> Webhook Support</li>
-                        <li><i class="fas fa-check"></i> Multi Session</li>
-                        <li><i class="fas fa-check"></i> Documentation</li>
-                    </ul>
-                    <div class="source-actions">
-                        <a href="#" class="download-btn" data-link="https://www.mediafire.com/file/whatsapp-api-source.zip/file">Download</a>
-                        <a href="https://www.youtube.com/embed/dQw4w9WgXcQ" class="preview-link" data-fancybox>
-                            <i class="fas fa-video"></i>
-                        </a>
-                    </div>
-                </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="minutes">00</div>
+                <div class="countdown-label">Menit</div>
             </div>
-            
-            <div class="source-card" data-category="mod">
-                <div class="source-thumb">
-                    <img src="https://images.unsplash.com/photo-1587560699334-cc4ff634909a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=900&q=80" alt="Source Code WhatsApp Web">
-                    <div class="preview-btn" data-video="https://www.youtube.com/embed/dQw4w9WgXcQ">
-                        <i class="fas fa-play"></i>
-                    </div>
-                </div>
-                <div class="source-info">
-                    <h3>WhatsApp Web Clone <span class="source-type">Modifikasi</span></h3>
-                    <p>Source code clone WhatsApp Web dengan React.js dan Node.js, cocok untuk pembelajaran dan pengembangan.</p>
-                    <ul class="source-features">
-                        <li><i class="fas fa-check"></i> React.js Frontend</li>
-                        <li><i class="fas fa-check"></i> Node.js Backend</li>
-                        <li><i class="fas fa-check"></i> Socket.io Real-time</li>
-                        <li><i class="fas fa-check"></i> MongoDB Database</li>
-                    </ul>
-                    <div class="source-actions">
-                        <a href="#" class="download-btn" data-link="https://www.mediafire.com/file/whatsapp-web-clone-source.zip/file">Download</a>
-                        <a href="https://www.youtube.com/embed/dQw4w9WgXcQ" class="preview-link" data-fancybox>
-                            <i class="fas fa-video"></i>
-                        </a>
-                    </div>
-                </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="seconds">00</div>
+                <div class="countdown-label">Detik</div>
             </div>
         </div>
         
-        <div class="info-box">
-            <h2>Panduan Penggunaan</h2>
-            <p>Sebelum menggunakan source code WhatsApp, pastikan untuk mengikuti panduan berikut:</p>
-            
+        <div class="description">
+            <h3>Apa yang akan Anda dapatkan?</h3>
+            <p>Source code WhatsApp modifikasi yang akan kami rilis meliputi:</p>
             <ul>
-                <li><strong>Persyaratan Sistem</strong>: Pastikan environment development sudah terinstall dengan benar</li>
-                <li><strong>Dependencies</strong>: Install semua dependencies yang diperlukan</li>
-                <li><strong>Konfigurasi</strong>: Edit file konfigurasi sesuai dengan environment Anda</li>
-                <li><strong>Build & Run</strong>: Ikuti instruksi pada dokumentasi untuk menjalankan project</li>
+                <li><strong>Kode lengkap BMWhatsApp</strong> - Full source code dengan semua fitur premium</li>
+                <li><strong>Dokumentasi lengkap</strong> - Panduan instalasi dan pengaturan step-by-step</li>
+                <li><strong>Customization guide</strong> - Cara memodifikasi dan menyesuaikan dengan kebutuhan</li>
+                <li><strong>Update regular</strong> - Akses ke update dan patch terbaru</li>
+                <li><strong>Support komunitas</strong> - Akses ke forum diskusi dengan developer lain</li>
             </ul>
-            
-            <div class="requirements">
-                <h3>Environment yang Disarankan:</h3>
-                <ul>
-                    <li>Node.js v16+ atau Python 3.8+</li>
-                    <li>MySQL/MongoDB database</li>
-                    <li>Git untuk version control</li>
-                    <li>Code editor (VS Code recommended)</li>
-                </ul>
-            </div>
-            
-            <div class="warning">
-                <p><strong>Penting</strong>: Source code ini hanya untuk tujuan edukasi dan pengembangan. Pastikan untuk mematuhi kebijakan layanan WhatsApp dan regulasi setempat dalam penggunaan source code ini.</p>
-            </div>
+            <p>Kami sedang melakukan final testing untuk memastikan kualitas terbaik sebelum rilis.</p>
         </div>
         
-        <footer>
-            <p>&copy; 2023 BUKAN MASTAH. All rights reserved.</p>
-        </footer>
-    </div>
-
-    <!-- Modal untuk konfirmasi download -->
-    <div class="modal" id="downloadModal">
-        <div class="modal-content">
-            <h3>Download Source Code</h3>
-            <p>Anda akan meninggalkan halaman ini dan diarahkan ke MediaFire untuk mengunduh file source code. Apakah Anda ingin melanjutkan?</p>
-            <div class="modal-buttons">
-                <a href="#" class="modal-btn confirm" id="confirmDownload">Ya, Download</a>
-                <button class="modal-btn cancel" id="cancelDownload">Batal</button>
-            </div>
+        <div class="notification">
+            <p><strong>Info Penting:</strong> Source code akan tersedia untuk download dalam waktu dekat. Dapatkan notifikasi ketika sudah rilis dengan mengisi formulir notifikasi (akan tersedia sebentar lagi).</p>
+        </div>
+        
+        <div class="cta-buttons">
+            <a href="index.html" class="btn">Kembali ke Beranda</a>
+            <a href="contact-owner.html" class="btn btn-secondary">Hubungi Owner</a>
         </div>
     </div>
 
     <script>
-        // Filter functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const filterButtons = document.querySelectorAll('.filter-btn');
-            const sourceCards = document.querySelectorAll('.source-card');
+        // Set tanggal rilis (contoh: 30 hari dari sekarang)
+        const releaseDate = new Date();
+        releaseDate.setDate(releaseDate.getDate() + 30);
+        
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = releaseDate - now;
             
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const filter = this.getAttribute('data-filter');
-                    
-                    // Update active button
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Filter cards
-                    sourceCards.forEach(card => {
-                        if (filter === 'all' || card.getAttribute('data-category') === filter) {
-                            card.style.display = 'block';
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
-                });
-            });
+            // Perhitungan waktu
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
             
-            // Preview button functionality
-            const previewButtons = document.querySelectorAll('.preview-btn');
-            previewButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const videoUrl = this.getAttribute('data-video');
-                    window.open(videoUrl, '_blank');
-                });
-            });
+            // Update tampilan
+            document.getElementById("days").textContent = days.toString().padStart(2, '0');
+            document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
             
-            // Download button functionality dengan modal konfirmasi
-            const downloadButtons = document.querySelectorAll('.download-btn');
-            const downloadModal = document.getElementById('downloadModal');
-            const confirmDownload = document.getElementById('confirmDownload');
-            const cancelDownload = document.getElementById('cancelDownload');
-            let currentDownloadLink = '';
-            
-            downloadButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Dapatkan link download dari atribut data
-                    currentDownloadLink = this.getAttribute('data-link');
-                    
-                    // Tampilkan modal konfirmasi
-                    downloadModal.style.display = 'flex';
-                });
-            });
-            
-            // Konfirmasi download
-            confirmDownload.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Redirect ke link download
-                window.open(currentDownloadLink, '_blank');
-                
-                // Sembunyikan modal
-                downloadModal.style.display = 'none';
-            });
-            
-            // Batal download
-            cancelDownload.addEventListener('click', function() {
-                // Sembunyikan modal
-                downloadModal.style.display = 'none';
-            });
-            
-            // Tutup modal jika klik di luar konten modal
-            window.addEventListener('click', function(e) {
-                if (e.target === downloadModal) {
-                    downloadModal.style.display = 'none';
-                }
-            });
-            
-            // Fancybox untuk preview video
-            const previewLinks = document.querySelectorAll('.preview-link');
-            previewLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const videoUrl = this.getAttribute('href');
-                    window.open(videoUrl, '_blank');
-                });
-            });
+            // Jika waktu habis
+            if (distance < 0) {
+                clearInterval(countdownTimer);
+                document.querySelector(".countdown").innerHTML = "<h3>Source Code Telah Dirilis!</h3>";
+                document.querySelector(".coming-soon-title").textContent = "SOURCE CODE TERSEDIA SEKARANG";
+                document.querySelector(".subtitle").textContent = "Source code WhatsApp modifikasi sudah tersedia untuk didownload. Selamat mencoba!";
+            }
+        }
+        
+        // Update countdown setiap detik
+        const countdownTimer = setInterval(updateCountdown, 1000);
+        
+        // Initial call
+        updateCountdown();
+        
+        // Animasi untuk icon
+        document.querySelector('.icon').addEventListener('mouseover', function() {
+            this.style.transform = 'scale(1.2)';
+            this.style.transition = 'transform 0.3s ease';
+        });
+        
+        document.querySelector('.icon').addEventListener('mouseout', function() {
+            this.style.transform = 'scale(1)';
         });
     </script>
 </body>
