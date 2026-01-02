@@ -20,11 +20,6 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       position: relative;
     }
-    .login-container h1 {
-      text-align: center;
-      color: #2c3e50;
-      margin-bottom: 30px;
-    }
     .panel-container {
       display: none;
       min-height: 100vh;
@@ -114,6 +109,10 @@
     button:hover {
       background: #0056b3;
     }
+    button:disabled {
+      background: #6c757d;
+      cursor: not-allowed;
+    }
     .delete-btn {
       background: #e74c3c;
       padding: 5px 10px;
@@ -121,6 +120,15 @@
     }
     .delete-btn:hover {
       background: #c0392b;
+    }
+    .vip-btn {
+      background: #ffc107;
+      color: #212529;
+      padding: 5px 10px;
+      font-size: 14px;
+    }
+    .vip-btn:hover {
+      background: #e0a800;
     }
     .form-group {
       margin-bottom: 15px;
@@ -173,6 +181,24 @@
       color: #7f8c8d;
       margin-top: 5px;
     }
+    .daily-limit-warning {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      color: #856404;
+      padding: 12px;
+      border-radius: 4px;
+      margin: 15px 0;
+      text-align: center;
+    }
+    .daily-limit-reached {
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+      padding: 12px;
+      border-radius: 4px;
+      margin: 15px 0;
+      text-align: center;
+    }
     .reseller-id-display {
       background: #34495e;
       padding: 10px;
@@ -191,6 +217,26 @@
     .status-expired {
       color: #e74c3c;
       font-weight: bold;
+    }
+    .status-vip {
+      color: #ffc107;
+      font-weight: bold;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .badge-vip {
+      background: #ffc107;
+      color: #212529;
+    }
+    .badge-regular {
+      background: #007bff;
+      color: white;
     }
     /* Styling untuk chat */
     .chat-container {
@@ -352,6 +398,55 @@
     #profileUpload {
       display: none;
     }
+    /* Tab styling untuk user dan VIP */
+    .tab-container {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      border-bottom: none;
+      border-radius: 5px 5px 0 0;
+      margin-right: 5px;
+    }
+    .tab.active {
+      background: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    /* Logout Button */
+    .logout-container {
+      padding: 20px;
+      text-align: center;
+      border-top: 1px solid #34495e;
+    }
+    .logout-btn {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .logout-btn:hover {
+      background: #c0392b;
+    }
+    .logout-btn i {
+      margin-right: 8px;
+    }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
@@ -387,37 +482,43 @@
   <div id="resellerPanel" class="panel-container">
     <div class="container">
       <div class="sidebar">
-          <h2>Panel Reseller</h2>
-          <div class="profile-upload">
-            <img id="profilePicture" src="https://via.placeholder.com/80" class="profile-picture" alt="Foto Profil">
-            <input type="file" id="profileUpload" accept="image/*">
-            <button class="profile-upload-btn" onclick="document.getElementById('profileUpload').click()">
-              <i class="fas fa-camera"></i> Ganti Foto
-            </button>
-          </div>
-          <div class="reseller-id-display">
-            <i class="fas fa-user"></i> <span id="displayResellerId"></span>
-          </div>
-          <ul>
-            <li class="active" onclick="showSection('dashboard')">
-              <i class="fas fa-tachometer-alt"></i> Dashboard
-            </li>
-            <li onclick="showSection('addUser')">
-              <i class="fas fa-user-plus"></i> Tambah User
-            </li>
-            <li onclick="showSection('userList')">
-              <i class="fas fa-users"></i> Daftar User
-            </li>
-            <li onclick="showSection('coinInfo')">
-              <i class="fas fa-coins"></i> Info Coin
-            </li>
-            <li onclick="showSection('groupChat')">
-              <i class="fas fa-comments"></i> Percakapan Grup
-            </li>
-            <li onclick="showSection('profileSettings')">
-              <i class="fas fa-cog"></i> Pengaturan Profil
-            </li>
-          </ul>
+        <h2>Panel Reseller</h2>
+        <div class="profile-upload">
+          <img id="profilePicture" src="https://via.placeholder.com/80" class="profile-picture" alt="Foto Profil">
+          <input type="file" id="profileUpload" accept="image/*">
+          <button class="profile-upload-btn" onclick="document.getElementById('profileUpload').click()">
+            <i class="fas fa-camera"></i> Ganti Foto
+          </button>
+        </div>
+        <div class="reseller-id-display">
+          <i class="fas fa-user"></i> <span id="displayResellerId"></span>
+        </div>
+        <ul>
+          <li class="active" onclick="showSection('dashboard')">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
+          </li>
+          <li onclick="showSection('addUser')">
+            <i class="fas fa-user-plus"></i> Tambah User
+          </li>
+          <li onclick="showSection('vipManagement')">
+            <i class="fas fa-crown"></i> Kelola VIP
+          </li>
+          <li onclick="showSection('coinInfo')">
+            <i class="fas fa-coins"></i> Info Coin
+          </li>
+          <li onclick="showSection('groupChat')">
+            <i class="fas fa-comments"></i> Percakapan Grup
+          </li>
+          <li onclick="showSection('profileSettings')">
+            <i class="fas fa-cog"></i> Pengaturan Profil
+          </li>
+        </ul>
+        
+        <div class="logout-container">
+          <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
       </div>
       
       <div class="main-content">
@@ -428,6 +529,10 @@
             Sisa Coin Anda: <span class="coin-count" id="remainingCoin">0</span>
             <div class="usage-info">1 Coin = 1 User (Maks 3 user/hari)</div>
           </div>
+          
+          <!-- Info Pembatasan Harian -->
+          <div id="dailyLimitInfoDashboard" class="daily-limit-info"></div>
+          
           <div class="stats-container">
             <div class="stat-card" style="border-left: 4px solid #3498db;">
               <h3>Total User</h3>
@@ -441,6 +546,10 @@
               <h3>User Expired</h3>
               <p id="expiredLicenses">0</p>
             </div>
+            <div class="stat-card" style="border-left: 4px solid #ffc107;">
+              <h3>User VIP</h3>
+              <p id="totalVipUsers">0</p>
+            </div>
           </div>
         </div>
         
@@ -451,52 +560,92 @@
             Sisa Coin Anda: <span class="coin-count" id="addUserRemainingCoin">0</span>
             <div class="usage-info" id="dailyLimitInfo"></div>
           </div>
-          <div class="form-container">
-            <form id="addUserForm">
-              <div class="form-group">
-                <label for="id">Device ID</label>
-                <input type="text" id="id" placeholder="Masukkan device ID" required>
-              </div>
-              <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" placeholder="Masukkan username" required>
-              </div>
-              <div class="form-group">
-                <label for="password">Password</label>
-                <input type="text" id="password" placeholder="Masukkan password" required>
-              </div>
-              <div class="form-group">
-                <label for="expiresAt">Tanggal Expired (maks 1 bulan)</label>
-                <input type="date" id="expiresAt" required>
-              </div>
-              <div class="form-group">
-                <label for="allowOffline">Akses Offline</label>
-                <select id="allowOffline">
-                  <option value="true">Diizinkan</option>
-                  <option value="false">Tidak Diizinkan</option>
-                </select>
-              </div>
-              <button type="submit" id="submitBtn">Tambah User</button>
-            </form>
+          
+          <!-- Warning Pembatasan Harian -->
+          <div id="dailyLimitWarning"></div>
+          
+          <div class="tab-container">
+            <div class="tab active" onclick="openUserTab(event, 'regularUser')">User Regular</div>
+            <div class="tab" onclick="openUserTab(event, 'vipUser')">User VIP</div>
+          </div>
+          
+          <!-- Form User Regular -->
+          <div id="regularUser" class="tab-content active">
+            <div class="form-container">
+              <form id="addUserForm">
+                <div class="form-group">
+                  <label for="id">Device ID</label>
+                  <input type="text" id="id" placeholder="Masukkan device ID" required>
+                </div>
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input type="text" id="username" placeholder="Masukkan username" required>
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="text" id="password" placeholder="Masukkan password" required>
+                </div>
+                <div class="form-group">
+                  <label for="expiresAt">Tanggal Expired (maks 1 bulan)</label>
+                  <input type="date" id="expiresAt" required>
+                </div>
+                <div class="form-group">
+                  <label for="allowOffline">Akses Offline</label>
+                  <select id="allowOffline">
+                    <option value="true">Diizinkan</option>
+                    <option value="false">Tidak Diizinkan</option>
+                  </select>
+                </div>
+                <button type="submit" id="submitBtn">Tambah User Regular</button>
+              </form>
+            </div>
+          </div>
+          
+          <!-- Form User VIP -->
+          <div id="vipUser" class="tab-content">
+            <div class="form-container">
+              <form id="addVipUserForm">
+                <div class="form-group">
+                  <label for="vipDeviceId">Device ID</label>
+                  <input type="text" id="vipDeviceId" placeholder="Masukkan device ID" required>
+                </div>
+                <div class="form-group">
+                  <label for="vipUsername">Nama User VIP</label>
+                  <input type="text" id="vipUsername" placeholder="Masukkan nama user VIP" required>
+                </div>
+                <div class="form-group">
+                  <label for="vipExpiryTime">Tanggal Expired (1 bulan)</label>
+                  <input type="date" id="vipExpiryTime" readonly required>
+                </div>
+                <div class="form-group">
+                  <label for="vipStatus">Status</label>
+                  <select id="vipStatus">
+                    <option value="active">Aktif</option>
+                    <option value="inactive">Nonaktif</option>
+                  </select>
+                </div>
+                <button type="submit" class="vip-btn" id="submitVipBtn">Tambah User VIP</button>
+              </form>
+            </div>
           </div>
         </div>
         
-        <!-- User List Section -->
-        <div id="userList" class="content-section hidden">
-          <h1 class="section-title">Daftar User Anda</h1>
+        <!-- VIP Management Section -->
+        <div id="vipManagement" class="content-section hidden">
+          <h1 class="section-title">Kelola User VIP</h1>
           <div class="table-container">
-            <table id="usersTable">
+            <table id="vipTable">
               <thead>
                 <tr>
                   <th>Device ID</th>
-                  <th>Username</th>
-                  <th>Password</th>
+                  <th>Nama</th>
                   <th>Tanggal Expired</th>
                   <th>Status</th>
+                  <th>Dibuat Pada</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
-              <tbody id="usersTableBody">
+              <tbody id="vipTableBody">
                 <!-- Data akan diisi oleh JavaScript -->
               </tbody>
             </table>
@@ -511,6 +660,7 @@
             <p>1 Coin dapat digunakan untuk menambahkan 1 user baru</p>
             <p>Anda dapat menambahkan maksimal 3 user per hari</p>
             <p>Masa aktif user maksimal 1 bulan</p>
+            <p>User VIP dibuat dengan durasi tetap 1 bulan</p>
           </div>
         </div>
         
@@ -573,6 +723,7 @@
     let currentReseller = null;
     let today = new Date().toISOString().split('T')[0];
     let dailyUsage = 0;
+    const DAILY_LIMIT = 3; // Batas maksimal user per hari
 
     // Fungsi login
     document.getElementById("loginFormElement").addEventListener("submit", async function(e) {
@@ -609,10 +760,13 @@
             loadProfilePicture();
             
             // Update dashboard
-            updateDashboard();
+            await updateDashboard();
             
             // Cek penggunaan hari ini
-            checkDailyUsage();
+            await checkDailyUsage();
+            
+            // Set tanggal VIP (1 bulan dari sekarang)
+            setVipExpiryDate();
             
           } else {
             alert("ID Device tidak terdaftar sebagai reseller. Silakan hubungi admin untuk membeli akun.");
@@ -636,6 +790,25 @@
       }
     });
 
+    // Fungsi untuk logout
+    function logout() {
+      if (confirm("Apakah Anda yakin ingin logout?")) {
+        // Hapus data dari localStorage
+        localStorage.removeItem('resellerDeviceId');
+        
+        // Reset variabel
+        currentReseller = null;
+        dailyUsage = 0;
+        
+        // Tampilkan form login, sembunyikan panel
+        document.getElementById("resellerPanel").style.display = "none";
+        document.getElementById("loginForm").style.display = "block";
+        
+        // Reset form login
+        document.getElementById("loginFormElement").reset();
+      }
+    }
+
     // Fungsi untuk menampilkan section
     function showSection(sectionId) {
       document.querySelectorAll('.content-section').forEach(section => {
@@ -651,19 +824,16 @@
       
       // Update info coin di berbagai section
       if (currentReseller) {
-        document.getElementById('remainingCoin').textContent = currentReseller.coin || 0;
-        document.getElementById('addUserRemainingCoin').textContent = currentReseller.coin || 0;
-        document.getElementById('coinInfoRemaining').textContent = currentReseller.coin || 0;
+        updateCoinDisplay();
         
         // Update info limit harian
         if (sectionId === 'addUser') {
-          document.getElementById('dailyLimitInfo').textContent = 
-            `Anda telah menambahkan ${dailyUsage}/3 user hari ini`;
+          updateDailyLimitDisplay();
         }
         
-        // Jika menampilkan daftar user, muat ulang data
-        if (sectionId === 'userList') {
-          loadUserList();
+        // Jika menampilkan VIP management, muat data VIP
+        if (sectionId === 'vipManagement') {
+          loadVipUsers();
         }
         
         // Jika menampilkan chat, muat pesan
@@ -675,7 +845,137 @@
         if (sectionId === 'profileSettings') {
           loadProfileData();
         }
+        
+        // Update info pembatasan di dashboard
+        if (sectionId === 'dashboard') {
+          updateDashboardLimitInfo();
+        }
       }
+    }
+
+    // Fungsi untuk memperbarui tampilan coin di semua section
+    function updateCoinDisplay() {
+      if (!currentReseller) return;
+      
+      const coinValue = currentReseller.coin || 0;
+      document.getElementById('remainingCoin').textContent = coinValue;
+      document.getElementById('addUserRemainingCoin').textContent = coinValue;
+      document.getElementById('coinInfoRemaining').textContent = coinValue;
+    }
+
+    // Fungsi untuk menampilkan info pembatasan harian
+    function updateDailyLimitDisplay() {
+      if (!currentReseller) return;
+      
+      const remainingSlots = DAILY_LIMIT - dailyUsage;
+      const warningElement = document.getElementById('dailyLimitWarning');
+      
+      if (dailyUsage >= DAILY_LIMIT) {
+        // Batas harian tercapai
+        warningElement.innerHTML = `
+          <div class="daily-limit-reached">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Batas Harian Tercapai!</strong><br>
+            Anda telah menambahkan ${dailyUsage} user hari ini. 
+            Anda dapat menambahkan user lagi besok.
+          </div>
+        `;
+        
+        // Nonaktifkan tombol submit
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('submitVipBtn').disabled = true;
+        document.getElementById('submitBtn').textContent = 'Batas Harian Tercapai';
+        document.getElementById('submitVipBtn').textContent = 'Batas Harian Tercapai';
+        
+      } else if (dailyUsage >= DAILY_LIMIT - 1) {
+        // Hanya tersisa 1 slot
+        warningElement.innerHTML = `
+          <div class="daily-limit-warning">
+            <i class="fas fa-info-circle"></i>
+            <strong>Peringatan:</strong> Anda hanya dapat menambahkan 1 user lagi hari ini.
+            (${dailyUsage}/${DAILY_LIMIT} user telah digunakan)
+          </div>
+        `;
+        
+        // Aktifkan tombol submit
+        document.getElementById('submitBtn').disabled = false;
+        document.getElementById('submitVipBtn').disabled = false;
+        document.getElementById('submitBtn').textContent = 'Tambah User Regular';
+        document.getElementById('submitVipBtn').textContent = 'Tambah User VIP';
+        
+      } else {
+        // Masih ada slot tersedia
+        warningElement.innerHTML = `
+          <div class="daily-limit-warning">
+            <i class="fas fa-info-circle"></i>
+            Anda dapat menambahkan ${remainingSlots} user lagi hari ini.
+            (${dailyUsage}/${DAILY_LIMIT} user telah digunakan)
+          </div>
+        `;
+        
+        // Aktifkan tombol submit
+        document.getElementById('submitBtn').disabled = false;
+        document.getElementById('submitVipBtn').disabled = false;
+        document.getElementById('submitBtn').textContent = 'Tambah User Regular';
+        document.getElementById('submitVipBtn').textContent = 'Tambah User VIP';
+      }
+      
+      // Update info di section add user
+      document.getElementById('dailyLimitInfo').textContent = 
+        `Anda telah menambahkan ${dailyUsage}/${DAILY_LIMIT} user hari ini`;
+    }
+
+    // Fungsi untuk menampilkan info pembatasan di dashboard
+    function updateDashboardLimitInfo() {
+      if (!currentReseller) return;
+      
+      const remainingSlots = DAILY_LIMIT - dailyUsage;
+      const limitElement = document.getElementById('dailyLimitInfoDashboard');
+      
+      if (dailyUsage >= DAILY_LIMIT) {
+        limitElement.innerHTML = `
+          <div class="daily-limit-reached">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Batas Harian Tercapai!</strong> 
+            Anda telah menambahkan ${dailyUsage} user hari ini.
+          </div>
+        `;
+      } else {
+        limitElement.innerHTML = `
+          <div class="daily-limit-warning">
+            <i class="fas fa-info-circle"></i>
+            <strong>Batas Harian:</strong> 
+            ${dailyUsage}/${DAILY_LIMIT} user digunakan hari ini. 
+            ${remainingSlots} slot tersisa.
+          </div>
+        `;
+      }
+    }
+
+    // Fungsi untuk tab user dan VIP
+    function openUserTab(evt, tabName) {
+      const tabContents = document.getElementsByClassName("tab-content");
+      for (let i = 0; i < tabContents.length; i++) {
+        tabContents[i].classList.remove("active");
+      }
+      
+      const tabs = document.getElementsByClassName("tab");
+      for (let i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove("active");
+      }
+      
+      document.getElementById(tabName).classList.add("active");
+      evt.currentTarget.classList.add("active");
+    }
+
+    // Set tanggal VIP (1 bulan dari sekarang)
+    function setVipExpiryDate() {
+      const today = new Date();
+      const oneMonthLater = new Date();
+      oneMonthLater.setMonth(today.getMonth() + 1);
+      
+      const vipExpiryDate = oneMonthLater.toISOString().split('T')[0];
+      document.getElementById("vipExpiryTime").value = vipExpiryDate;
     }
 
     // Update dashboard
@@ -683,9 +983,24 @@
       if (!currentReseller) return;
       
       try {
+        // Ambil data reseller terbaru dari database
+        const resellerRes = await fetch(dbUrl + "resellers.json");
+        const resellers = await resellerRes.json();
+        
+        if (Array.isArray(resellers)) {
+          const updatedReseller = resellers.find(r => r.id === currentReseller.id);
+          if (updatedReseller) {
+            currentReseller = updatedReseller;
+          }
+        }
+        
         // Ambil data user
         const usersRes = await fetch(dbUrl + "licenses.json");
         const usersData = await usersRes.json();
+        
+        // Ambil data VIP
+        const vipRes = await fetch(dbUrl + "allowed_devices.json");
+        const vipData = await vipRes.json();
         
         // Filter user yang dibuat oleh reseller ini
         let userList = [];
@@ -693,26 +1008,52 @@
           userList = usersData.filter(user => user && user.resellerId === currentReseller.id);
         }
         
+        // Filter VIP yang dibuat oleh reseller ini
+        let vipList = [];
+        if (vipData && vipData.allowed_devices) {
+          Object.entries(vipData.allowed_devices).forEach(([deviceId, userData]) => {
+            if (userData.resellerId === currentReseller.id) {
+              vipList.push({ deviceId, ...userData });
+            }
+          });
+        }
+        
         // Update statistik
-        document.getElementById('totalUsers').textContent = userList.length;
+        document.getElementById('totalUsers').textContent = userList.length + vipList.length;
         
         // Hitung user aktif dan expired
+        const now = new Date();
+        let activeLicenses = 0;
+        let expiredLicenses = 0;
+        
+        // Hitung user regular
         if (userList.length > 0) {
-          const now = new Date();
-          const activeLicenses = userList.filter(user => {
+          activeLicenses = userList.filter(user => {
             const expiryDate = new Date(user.expiresAt);
             return expiryDate > now;
           }).length;
-          
-          document.getElementById('activeLicenses').textContent = activeLicenses;
-          document.getElementById('expiredLicenses').textContent = userList.length - activeLicenses;
-        } else {
-          document.getElementById('activeLicenses').textContent = '0';
-          document.getElementById('expiredLicenses').textContent = '0';
+          expiredLicenses = userList.length - activeLicenses;
         }
         
-        // Update info coin
-        document.getElementById('remainingCoin').textContent = currentReseller.coin || 0;
+        // Hitung user VIP
+        if (vipList.length > 0) {
+          const activeVip = vipList.filter(user => {
+            const expiryTime = user.expiry_time;
+            return expiryTime > now.getTime() && user.status === 'active';
+          }).length;
+          activeLicenses += activeVip;
+          expiredLicenses += (vipList.length - activeVip);
+        }
+        
+        document.getElementById('activeLicenses').textContent = activeLicenses;
+        document.getElementById('expiredLicenses').textContent = expiredLicenses;
+        document.getElementById('totalVipUsers').textContent = vipList.length;
+        
+        // Update info coin dengan format yang benar
+        updateCoinDisplay();
+        
+        // Update info pembatasan harian
+        updateDashboardLimitInfo();
         
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -732,6 +1073,11 @@
         } else {
           dailyUsage = 0;
         }
+        
+        // Update tampilan pembatasan
+        updateDailyLimitDisplay();
+        updateDashboardLimitInfo();
+        
       } catch (error) {
         console.error("Error checking daily usage:", error);
         dailyUsage = 0;
@@ -742,15 +1088,16 @@
     async function addUser(user) {
       if (!currentReseller) return;
       
-      // Validasi coin
-      if (currentReseller.coin < 1) {
+      // Validasi coin yang lebih ketat
+      const currentCoin = currentReseller.coin || 0;
+      if (currentCoin < 1) {
         alert("Coin Anda tidak cukup!");
         return;
       }
       
-      // Validasi limit harian
-      if (dailyUsage >= 3) {
-        alert("Anda sudah mencapai batas penambahan user hari ini (maks 3 user/hari)");
+      // Validasi batas harian yang lebih ketat
+      if (dailyUsage >= DAILY_LIMIT) {
+        alert(`Anda sudah mencapai batas penambahan user hari ini (maks ${DAILY_LIMIT} user/hari). Silakan coba lagi besok.`);
         return;
       }
       
@@ -782,14 +1129,112 @@
           headers: {"Content-Type": "application/json"}
         });
         
-        // Kurangi coin reseller
+        // Kurangi coin reseller dengan benar
+        await updateResellerCoin(-1);
+        
+        // Update penggunaan harian
+        await updateDailyUsage();
+        
+        // Update UI
+        alert("User berhasil ditambahkan!");
+        document.getElementById("addUserForm").reset();
+        await updateDashboard();
+        showSection('dashboard');
+        
+      } catch (error) {
+        console.error("Error adding user:", error);
+        alert("Terjadi kesalahan saat menambahkan user");
+      }
+    }
+
+    // Tambah user VIP
+    async function addVipUser(vipUser) {
+      if (!currentReseller) return;
+      
+      // Validasi coin yang lebih ketat
+      const currentCoin = currentReseller.coin || 0;
+      if (currentCoin < 1) {
+        alert("Coin Anda tidak cukup!");
+        return;
+      }
+      
+      // Validasi batas harian yang lebih ketat
+      if (dailyUsage >= DAILY_LIMIT) {
+        alert(`Anda sudah mencapai batas penambahan user hari ini (maks ${DAILY_LIMIT} user/hari). Silakan coba lagi besok.`);
+        return;
+      }
+      
+      try {
+        // Ambil data VIP
+        const res = await fetch(dbUrl + "allowed_devices.json");
+        let vipData = await res.json();
+        
+        if (!vipData) {
+          vipData = { allowed_devices: {} };
+        } else if (!vipData.allowed_devices) {
+          vipData.allowed_devices = {};
+        }
+        
+        // Cek apakah device ID sudah ada
+        if (vipData.allowed_devices[vipUser.deviceId]) {
+          alert("Device ID sudah terdaftar sebagai user VIP!");
+          return;
+        }
+        
+        // Tambahkan user VIP baru
+        vipData.allowed_devices[vipUser.deviceId] = {
+          name: vipUser.name,
+          expiry_time: vipUser.expiry_time,
+          status: vipUser.status,
+          created_at: vipUser.created_at,
+          resellerId: currentReseller.id
+        };
+        
+        // Simpan ke database
+        await fetch(dbUrl + "allowed_devices.json", {
+          method: "PUT",
+          body: JSON.stringify(vipData),
+          headers: {"Content-Type": "application/json"}
+        });
+        
+        // Kurangi coin reseller dengan benar
+        await updateResellerCoin(-1);
+        
+        // Update penggunaan harian
+        await updateDailyUsage();
+        
+        // Update UI
+        alert("User VIP berhasil ditambahkan!");
+        document.getElementById("addVipUserForm").reset();
+        setVipExpiryDate(); // Reset tanggal VIP
+        await updateDashboard();
+        showSection('vipManagement'); // Tampilkan halaman VIP
+        
+      } catch (error) {
+        console.error("Error adding VIP user:", error);
+        alert("Terjadi kesalahan saat menambahkan user VIP");
+      }
+    }
+
+    // Update coin reseller dengan validasi
+    async function updateResellerCoin(amount) {
+      try {
         const resellerRes = await fetch(dbUrl + "resellers.json");
         let resellers = await resellerRes.json();
         
         if (Array.isArray(resellers)) {
           const resellerIndex = resellers.findIndex(r => r.id === currentReseller.id);
           if (resellerIndex !== -1) {
-            resellers[resellerIndex].coin -= 1;
+            // Validasi agar coin tidak minus
+            const newCoinValue = resellers[resellerIndex].coin + amount;
+            if (newCoinValue < 0) {
+              alert("Coin tidak mencukupi!");
+              throw new Error("Insufficient coins");
+            }
+            
+            resellers[resellerIndex].coin = newCoinValue;
+            
+            // Pastikan userCount ada
             if (!resellers[resellerIndex].userCount) {
               resellers[resellerIndex].userCount = 0;
             }
@@ -803,10 +1248,20 @@
             
             // Update data reseller saat ini
             currentReseller = resellers[resellerIndex];
+            
+            // Update tampilan coin
+            updateCoinDisplay();
           }
         }
-        
-        // Update penggunaan harian
+      } catch (error) {
+        console.error("Error updating reseller coin:", error);
+        throw error; // Lempar error untuk ditangani di caller
+      }
+    }
+
+    // Update penggunaan harian
+    async function updateDailyUsage() {
+      try {
         const usageRes = await fetch(dbUrl + "resellerUsage.json");
         let usageData = await usageRes.json();
         if (!usageData) usageData = {};
@@ -826,22 +1281,25 @@
         
         dailyUsage = usageData[currentReseller.id][today];
         
-        // Update UI
-        alert("User berhasil ditambahkan!");
-        document.getElementById("addUserForm").reset();
-        updateDashboard();
-        loadUserList(); // Muat ulang daftar user
-        showSection('userList'); // Tampilkan halaman daftar user
+        // Update tampilan pembatasan
+        updateDailyLimitDisplay();
+        updateDashboardLimitInfo();
         
       } catch (error) {
-        console.error("Error adding user:", error);
-        alert("Terjadi kesalahan saat menambahkan user");
+        console.error("Error updating daily usage:", error);
       }
     }
 
-    // Form tambah user
+    // Form tambah user regular
     document.getElementById("addUserForm").addEventListener("submit", function(e) {
       e.preventDefault();
+      
+      // Validasi batas harian sebelum submit
+      if (dailyUsage >= DAILY_LIMIT) {
+        alert(`Anda sudah mencapai batas penambahan user hari ini (maks ${DAILY_LIMIT} user/hari). Silakan coba lagi besok.`);
+        return;
+      }
+      
       const user = {
         id: document.getElementById("id").value,
         username: document.getElementById("username").value,
@@ -852,36 +1310,55 @@
       addUser(user);
     });
 
-    // Fungsi untuk memuat daftar user
-    async function loadUserList() {
+    // Form tambah user VIP
+    document.getElementById("addVipUserForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      
+      // Validasi batas harian sebelum submit
+      if (dailyUsage >= DAILY_LIMIT) {
+        alert(`Anda sudah mencapai batas penambahan user hari ini (maks ${DAILY_LIMIT} user/hari). Silakan coba lagi besok.`);
+        return;
+      }
+      
+      const vipUser = {
+        deviceId: document.getElementById("vipDeviceId").value,
+        name: document.getElementById("vipUsername").value,
+        expiry_time: new Date(document.getElementById("vipExpiryTime").value).getTime(),
+        status: document.getElementById("vipStatus").value,
+        created_at: Date.now()
+      };
+      addVipUser(vipUser);
+    });
+
+    // Fungsi untuk memuat daftar user VIP
+    async function loadVipUsers() {
       if (!currentReseller) return;
       
       try {
-        const usersRes = await fetch(dbUrl + "licenses.json");
-        const usersData = await usersRes.json();
-        
-        const tableBody = document.getElementById('usersTableBody');
+        const res = await fetch(dbUrl + "allowed_devices.json");
+        const vipData = await res.json();
+        const tableBody = document.getElementById('vipTableBody');
         tableBody.innerHTML = '';
         
-        const now = new Date();
-        
-        if (Array.isArray(usersData)) {
-          usersData.forEach((user, index) => {
-            if (user && user.resellerId === currentReseller.id) {
-              const expiryDate = new Date(user.expiresAt);
-              const isExpired = expiryDate < now;
+        if (vipData && vipData.allowed_devices) {
+          const now = Date.now();
+          
+          Object.entries(vipData.allowed_devices).forEach(([deviceId, userData]) => {
+            if (userData.resellerId === currentReseller.id) {
+              const expiryTime = userData.expiry_time;
+              const isExpired = expiryTime < now;
               
               const row = document.createElement('tr');
               row.innerHTML = `
-                <td>${user.id || '-'}</td>
-                <td>${user.username || '-'}</td>
-                <td>${user.password || '-'}</td>
-                <td>${user.expiresAt || '-'}</td>
-                <td class="${isExpired ? 'status-expired' : 'status-active'}">
-                  ${isExpired ? 'EXPIRED' : 'AKTIF'}
+                <td>${deviceId}</td>
+                <td>${userData.name}</td>
+                <td>${new Date(expiryTime).toLocaleDateString()}</td>
+                <td class="${isExpired || userData.status !== 'active' ? 'status-expired' : 'status-vip'}">
+                  ${isExpired || userData.status !== 'active' ? 'EXPIRED' : 'VIP AKTIF'}
                 </td>
+                <td>${new Date(userData.created_at).toLocaleDateString()}</td>
                 <td class="action-btns">
-                  <button class="delete-btn" onclick="deleteUser(${index})">
+                  <button class="delete-btn" onclick="deleteVipUser('${deviceId}')">
                     <i class="fas fa-trash"></i> Hapus
                   </button>
                 </td>
@@ -893,41 +1370,41 @@
         }
         
         if (tableBody.children.length === 0) {
-          tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Belum ada user</td></tr>';
+          tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Belum ada user VIP</td></tr>';
         }
         
       } catch (error) {
-        console.error("Error loading user list:", error);
-        alert("Gagal memuat daftar user");
+        console.error("Error loading VIP users:", error);
+        alert("Gagal memuat daftar user VIP");
       }
     }
     
-    // Fungsi untuk menghapus user
-    async function deleteUser(userIndex) {
-      if (!confirm("Apakah Anda yakin ingin menghapus user ini?")) return;
+    // Fungsi untuk menghapus user VIP
+    async function deleteVipUser(deviceId) {
+      if (!confirm("Apakah Anda yakin ingin menghapus user VIP ini?")) return;
       
       try {
-        const res = await fetch(dbUrl + "licenses.json");
-        let users = await res.json();
+        const res = await fetch(dbUrl + "allowed_devices.json");
+        let vipData = await res.json();
         
-        if (Array.isArray(users)) {
-          // Hapus user dari array
-          users.splice(userIndex, 1);
-          
-          // Simpan ke database
-          await fetch(dbUrl + "licenses.json", {
-            method: "PUT",
-            body: JSON.stringify(users),
-            headers: {"Content-Type": "application/json"}
-          });
-          
-          alert("User berhasil dihapus");
-          loadUserList(); // Muat ulang daftar user
-          updateDashboard(); // Update statistik dashboard
+        if (!vipData || !vipData.allowed_devices || !vipData.allowed_devices[deviceId]) {
+          return;
         }
+        
+        delete vipData.allowed_devices[deviceId];
+        
+        await fetch(dbUrl + "allowed_devices.json", {
+          method: "PUT",
+          body: JSON.stringify(vipData),
+          headers: {"Content-Type": "application/json"}
+        });
+        
+        alert("User VIP berhasil dihapus");
+        loadVipUsers();
+        updateDashboard();
       } catch (error) {
-        console.error("Error deleting user:", error);
-        alert("Gagal menghapus user");
+        console.error("Error deleting VIP user:", error);
+        alert("Gagal menghapus user VIP");
       }
     }
     
@@ -1171,7 +1648,7 @@
 
     // Inisialisasi halaman
     document.addEventListener("DOMContentLoaded", function() {
-      // Set tanggal maksimum (1 bulan dari sekarang)
+      // Set tanggal maksimum untuk user regular (1 bulan dari sekarang)
       const today = new Date();
       const oneMonthLater = new Date();
       oneMonthLater.setMonth(today.getMonth() + 1);
@@ -1179,10 +1656,13 @@
       const maxDate = oneMonthLater.toISOString().split('T')[0];
       document.getElementById("expiresAt").max = maxDate;
       
-      // Set tanggal default (7 hari dari sekarang)
+      // Set tanggal default untuk user regular (7 hari dari sekarang)
       const defaultDate = new Date();
       defaultDate.setDate(today.getDate() + 7);
       document.getElementById("expiresAt").valueAsDate = defaultDate;
+      
+      // Set tanggal VIP (1 bulan dari sekarang)
+      setVipExpiryDate();
       
       // Event listener untuk chat
       document.getElementById("chatSendBtn").addEventListener("click", sendChatMessage);
