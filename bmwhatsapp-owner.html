@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Owner Panel - Secure Telegram Notif</title>
+  <title>Owner Panel - Blacklist & Telegram Notif</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
   <meta name="theme-color" content="#1e2a3a">
   <!-- Firebase SDK -->
@@ -23,9 +23,9 @@
     .login-error { color: #ef4444; text-align: center; margin-top: 12px; font-size: 0.85rem; }
     .hidden { display: none !important; }
     .mobile-container { display: flex; flex-direction: column; min-height: 100vh; }
-    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(10px); display: flex; justify-content: space-around; padding: 10px 12px 20px; border-top: 1px solid #e2e8f0; box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05); z-index: 100; }
-    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; background: none; border: none; padding: 8px 8px; border-radius: 40px; font-size: 0.65rem; font-weight: 600; color: #64748b; transition: all 0.2s; cursor: pointer; }
-    .nav-item i { font-size: 1.4rem; margin-bottom: 2px; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(10px); display: flex; justify-content: space-around; padding: 10px 12px 20px; border-top: 1px solid #e2e8f0; box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05); z-index: 100; overflow-x: auto; gap: 4px; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; background: none; border: none; padding: 8px 8px; border-radius: 40px; font-size: 0.6rem; font-weight: 600; color: #64748b; transition: all 0.2s; cursor: pointer; white-space: nowrap; }
+    .nav-item i { font-size: 1.2rem; margin-bottom: 2px; }
     .nav-item.active { color: #9b59b6; background: #f3e8ff; }
     .main-panel { padding: 20px 16px 90px 16px; flex: 1; }
     h1.section-title { font-size: 1.5rem; margin-bottom: 20px; padding-left: 8px; border-left: 5px solid #9b59b6; font-weight: 700; }
@@ -37,7 +37,7 @@
     .filter-bar input, .filter-bar select { flex: 1; padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 40px; background: white; font-size: 0.85rem; }
     .mobile-list { display: flex; flex-direction: column; gap: 12px; }
     .user-card { background: white; border-radius: 20px; padding: 14px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); }
-    .user-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+    .user-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 6px; }
     .device-id { font-family: monospace; font-weight: 700; background: #f1f5f9; padding: 4px 10px; border-radius: 40px; font-size: 0.75rem; word-break: break-all; }
     .badge { display: inline-block; padding: 4px 12px; border-radius: 40px; font-size: 0.7rem; font-weight: 700; }
     .badge-premium-plus { background: #9b59b6; color: white; }
@@ -46,19 +46,22 @@
     .badge-trial { background: #f59e0b; color: white; }
     .badge-trial-expired { background: #94a3b8; color: white; }
     .badge-reseller { background: #10b981; color: white; }
-    .user-detail { display: flex; justify-content: space-between; margin: 8px 0; font-size: 0.8rem; color: #334155; flex-wrap: wrap; }
+    .badge-blacklist { background: #dc2626; color: white; }
+    .user-detail { display: flex; justify-content: space-between; margin: 8px 0; font-size: 0.8rem; color: #334155; flex-wrap: wrap; gap: 8px; }
     .action-buttons { display: flex; gap: 10px; margin-top: 12px; }
-    .edit-btn, .delete-btn { flex: 1; padding: 8px; border-radius: 40px; border: none; font-weight: 600; font-size: 0.75rem; cursor: pointer; }
+    .edit-btn, .delete-btn, .unblacklist-btn { flex: 1; padding: 8px; border-radius: 40px; border: none; font-weight: 600; font-size: 0.75rem; cursor: pointer; }
     .edit-btn { background: #3b82f6; color: white; }
     .delete-btn { background: #ef4444; color: white; }
+    .unblacklist-btn { background: #10b981; color: white; }
     .form-container { background: white; border-radius: 28px; padding: 20px; margin-top: 16px; }
-    input, select { width: 100%; padding: 12px; border-radius: 20px; border: 1.5px solid #e2e8f0; font-size: 0.9rem; margin-bottom: 12px; }
+    input, select, textarea { width: 100%; padding: 12px; border-radius: 20px; border: 1.5px solid #e2e8f0; font-size: 0.9rem; margin-bottom: 12px; }
     button[type="submit"] { background: #27ae60; width: 100%; padding: 14px; border-radius: 40px; font-weight: bold; margin-top: 8px; border: none; color: white; cursor: pointer; }
     .logout-fab { position: fixed; bottom: 80px; right: 16px; background: #ef4444; color: white; width: 50px; height: 50px; border-radius: 30px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 99; cursor: pointer; border: none; }
     .content-section { display: block; }
     .hidden-section { display: none; }
     .telegram-status { background: #e8f0fe; padding: 10px; border-radius: 12px; margin-top: 10px; font-size: 0.8rem; }
     .admin-only { background: #fef3c7; border-left: 3px solid #f59e0b; padding: 12px; margin-bottom: 16px; border-radius: 12px; font-size: 0.8rem; }
+    .blacklist-preview { background: #fee2e2; padding: 8px; border-radius: 12px; margin-top: 8px; font-size: 0.75rem; }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -83,6 +86,7 @@
     <button class="nav-item" data-section="premiumStandart"><i class="fas fa-gem"></i><span>Standar</span></button>
     <button class="nav-item" data-section="trialPage"><i class="fas fa-hourglass-half"></i><span>Trial</span></button>
     <button class="nav-item" data-section="resellerPage"><i class="fas fa-store"></i><span>Reseller</span></button>
+    <button class="nav-item" data-section="blacklistPage"><i class="fas fa-ban"></i><span>Blacklist</span></button>
     <button class="nav-item" data-section="addNew"><i class="fas fa-plus-circle"></i><span>Tambah</span></button>
     <button class="nav-item" data-section="settingsPage"><i class="fas fa-cog"></i><span>Setelan</span></button>
   </div>
@@ -98,6 +102,7 @@
         <div class="stat-card" style="border-left-color:#f59e0b;"><h3>Trial Aktif</h3><p id="activeTrials">0</p></div>
         <div class="stat-card" style="border-left-color:#94a3b8;"><h3>Trial Habis</h3><p id="expiredTrials">0</p></div>
         <div class="stat-card" style="border-left-color:#10b981;"><h3>Reseller</h3><p id="totalResellers">0</p></div>
+        <div class="stat-card" style="border-left-color:#dc2626;"><h3>Blacklist</h3><p id="totalBlacklist">0</p></div>
       </div>
       <div class="telegram-status" id="telegramStatus">
         <i class="fab fa-telegram"></i> <span id="telegramNotifStatus">🔌 Memuat status...</span>
@@ -106,40 +111,35 @@
 
     <div id="premiumPlus" class="content-section hidden-section">
       <h1 class="section-title"><i class="fas fa-crown"></i> Premium Plus</h1>
-      <div class="filter-bar">
-        <input type="text" id="searchPlusMobile" placeholder="Cari device / nama">
-        <select id="statusPlusMobile"><option value="">Semua</option><option value="active">Aktif</option><option value="expired">Expired</option></select>
-      </div>
+      <div class="filter-bar"><input type="text" id="searchPlusMobile" placeholder="Cari device / nama"><select id="statusPlusMobile"><option value="">Semua</option><option value="active">Aktif</option><option value="expired">Expired</option></select></div>
       <div id="premiumPlusList" class="mobile-list">Loading...</div>
     </div>
 
     <div id="premiumStandart" class="content-section hidden-section">
       <h1 class="section-title"><i class="fas fa-gem"></i> Premium Standart</h1>
-      <div class="filter-bar">
-        <input type="text" id="searchStandartMobile" placeholder="Cari device / nama">
-        <select id="statusStandartMobile"><option value="">Semua</option><option value="active">Aktif</option><option value="expired">Expired</option></select>
-      </div>
+      <div class="filter-bar"><input type="text" id="searchStandartMobile" placeholder="Cari device / nama"><select id="statusStandartMobile"><option value="">Semua</option><option value="active">Aktif</option><option value="expired">Expired</option></select></div>
       <div id="premiumStandartList" class="mobile-list">Loading...</div>
     </div>
 
     <div id="trialPage" class="content-section hidden-section">
       <h1 class="section-title"><i class="fas fa-hourglass-half"></i> Data Trial</h1>
-      <div class="filter-bar">
-        <input type="text" id="searchTrialMobile" placeholder="Cari device ID">
-        <select id="statusTrialMobile"><option value="">Semua</option><option value="active">Aktif</option><option value="expired">Expired</option></select>
-      </div>
+      <div class="filter-bar"><input type="text" id="searchTrialMobile" placeholder="Cari device ID"><select id="statusTrialMobile"><option value="">Semua</option><option value="active">Aktif</option><option value="expired">Expired</option></select></div>
       <div id="trialListContainer" class="mobile-list">Memuat data trial...</div>
     </div>
 
     <div id="resellerPage" class="content-section hidden-section">
       <h1 class="section-title"><i class="fas fa-store"></i> Manajemen Reseller</h1>
-      <div class="filter-bar">
-        <input type="text" id="searchResellerInput" placeholder="Cari ID reseller / kode">
-      </div>
-      <div style="margin-bottom: 16px;">
-        <button onclick="showAddResellerForm()" style="background:#9b59b6; color:white; border:none; padding:12px 20px; border-radius:40px; width:100%; font-weight:bold;"><i class="fas fa-plus-circle"></i> Tambah Reseller Baru</button>
-      </div>
+      <div class="filter-bar"><input type="text" id="searchResellerInput" placeholder="Cari ID reseller / kode"></div>
+      <div style="margin-bottom: 16px;"><button onclick="showAddResellerForm()" style="background:#9b59b6; color:white; border:none; padding:12px 20px; border-radius:40px; width:100%; font-weight:bold;"><i class="fas fa-plus-circle"></i> Tambah Reseller Baru</button></div>
       <div id="resellerListContainer" class="mobile-list">Memuat reseller...</div>
+    </div>
+
+    <!-- BLACKLIST SECTION BARU -->
+    <div id="blacklistPage" class="content-section hidden-section">
+      <h1 class="section-title"><i class="fas fa-ban"></i> Manajemen Blacklist</h1>
+      <div class="filter-bar"><input type="text" id="searchBlacklistInput" placeholder="Cari Device ID / Pesan / Title"></div>
+      <div style="margin-bottom: 16px;"><button onclick="showAddBlacklistForm()" style="background:#dc2626; color:white; border:none; padding:12px 20px; border-radius:40px; width:100%; font-weight:bold;"><i class="fas fa-plus-circle"></i> + Tambah Blacklist</button></div>
+      <div id="blacklistListContainer" class="mobile-list">Memuat blacklist...</div>
     </div>
 
     <div id="addNew" class="content-section hidden-section">
@@ -158,21 +158,11 @@
 
     <div id="settingsPage" class="content-section hidden-section">
       <h1 class="section-title"><i class="fas fa-cog"></i> Pengaturan Telegram</h1>
-      <div class="admin-only">
-        <i class="fas fa-shield-alt"></i> <strong>Area Khusus Owner</strong> - Konfigurasi ini hanya tampil setelah login
-      </div>
+      <div class="admin-only"><i class="fas fa-shield-alt"></i> <strong>Area Khusus Owner</strong> - Konfigurasi ini hanya tampil setelah login</div>
       <div class="form-container">
         <form id="telegramSettingsForm">
-          <div class="form-group">
-            <label><i class="fab fa-telegram"></i> Bot Token</label>
-            <input type="password" id="telegramBotTokenInput" placeholder="Masukkan Bot Token (tersembunyi)" autocomplete="off">
-            <small style="color:#64748b; font-size:0.7rem;">Dapatkan dari @BotFather di Telegram</small>
-          </div>
-          <div class="form-group">
-            <label><i class="fas fa-id-badge"></i> Chat ID</label>
-            <input type="text" id="telegramChatIdInput" placeholder="Masukkan Chat ID" autocomplete="off">
-            <small style="color:#64748b; font-size:0.7rem;">Dapatkan dari @userinfobot</small>
-          </div>
+          <div class="form-group"><label><i class="fab fa-telegram"></i> Bot Token</label><input type="password" id="telegramBotTokenInput" placeholder="Masukkan Bot Token" autocomplete="off"><small style="color:#64748b;">Dapatkan dari @BotFather</small></div>
+          <div class="form-group"><label><i class="fas fa-id-badge"></i> Chat ID</label><input type="text" id="telegramChatIdInput" placeholder="Masukkan Chat ID" autocomplete="off"><small style="color:#64748b;">Dapatkan dari @userinfobot</small></div>
           <button type="submit"><i class="fas fa-save"></i> Simpan Pengaturan</button>
         </form>
         <button onclick="testTelegramNotif()" style="background:#3498db; margin-top:10px;"><i class="fab fa-telegram"></i> Uji Coba Notifikasi</button>
@@ -180,12 +170,10 @@
       </div>
     </div>
   </div>
-
   <button class="logout-fab" onclick="logoutMobile()"><i class="fas fa-sign-out-alt"></i></button>
 </div>
 
 <script>
-  // Firebase Config
   const firebaseConfig = {
     apiKey: "AIzaSyAPhmV0dV4kGVzh-F1kwE60L_kJYkHWmsg",
     authDomain: "wa-license.firebaseapp.com",
@@ -197,420 +185,130 @@
   };
   firebase.initializeApp(firebaseConfig);
 
-  // Konfigurasi Telegram - disimpan di sessionStorage (hilang saat logout/tutup browser)
-  let telegramConfig = {
-    botToken: sessionStorage.getItem('telegramBotToken') || '',
-    chatId: sessionStorage.getItem('telegramChatId') || ''
-  };
-
-  function saveTelegramConfigToSession() {
-    if(telegramConfig.botToken) sessionStorage.setItem('telegramBotToken', telegramConfig.botToken);
-    if(telegramConfig.chatId) sessionStorage.setItem('telegramChatId', telegramConfig.chatId);
-    updateTelegramStatusDisplay();
-  }
-
+  let telegramConfig = { botToken: sessionStorage.getItem('telegramBotToken') || '', chatId: sessionStorage.getItem('telegramChatId') || '' };
+  function saveTelegramConfigToSession() { if(telegramConfig.botToken) sessionStorage.setItem('telegramBotToken', telegramConfig.botToken); if(telegramConfig.chatId) sessionStorage.setItem('telegramChatId', telegramConfig.chatId); updateTelegramStatusDisplay(); }
   function updateTelegramStatusDisplay() {
     const statusSpan = document.getElementById('telegramNotifStatus');
-    if(statusSpan) {
-      if(telegramConfig.botToken && telegramConfig.chatId) {
-        statusSpan.innerHTML = '✅ Notifikasi Telegram AKTIF (tersimpan di session)';
-        statusSpan.style.color = '#27ae60';
-      } else {
-        statusSpan.innerHTML = '⚠️ Notifikasi Telegram nonaktif. Setting di menu Setelan → Pengaturan Telegram';
-        statusSpan.style.color = '#f39c12';
-      }
-    }
+    if(statusSpan) { if(telegramConfig.botToken && telegramConfig.chatId) { statusSpan.innerHTML = '✅ Notifikasi Telegram AKTIF (tersimpan di session)'; statusSpan.style.color = '#27ae60'; } else { statusSpan.innerHTML = '⚠️ Notifikasi Telegram nonaktif. Setting di menu Setelan'; statusSpan.style.color = '#f39c12'; } }
   }
+  async function sendTelegramNotification(message) { if(!telegramConfig.botToken || !telegramConfig.chatId) return false; try { const url = `https://api.telegram.org/bot${telegramConfig.botToken}/sendMessage`; const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: telegramConfig.chatId, text: message, parse_mode: 'HTML' }) }); const result = await response.json(); return result.ok; } catch(e) { return false; } }
+  async function testTelegramNotif() { if(!telegramConfig.botToken || !telegramConfig.chatId) { alert('❌ Konfigurasi Telegram belum diisi!'); return; } const status = await sendTelegramNotification('🔔 *Test Notifikasi dari Owner Panel*\n\n✅ Jika Anda menerima pesan ini, konfigurasi berhasil!'); alert(status ? '✅ Notifikasi test berhasil!' : '❌ Gagal mengirim.'); }
+  function clearTelegramConfig() { if(confirm('Hapus konfigurasi Telegram?')) { telegramConfig.botToken = ''; telegramConfig.chatId = ''; sessionStorage.removeItem('telegramBotToken'); sessionStorage.removeItem('telegramChatId'); document.getElementById('telegramBotTokenInput').value = ''; document.getElementById('telegramChatIdInput').value = ''; updateTelegramStatusDisplay(); alert('✅ Konfigurasi dihapus.'); } }
 
-  async function sendTelegramNotification(message) {
-    if(!telegramConfig.botToken || !telegramConfig.chatId) {
-      console.log("Telegram not configured");
-      return false;
-    }
-    const url = `https://api.telegram.org/bot${telegramConfig.botToken}/sendMessage`;
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: telegramConfig.chatId,
-          text: message,
-          parse_mode: 'HTML'
-        })
-      });
-      const result = await response.json();
-      if(result.ok) {
-        console.log("Telegram notif terkirim");
-        return true;
-      } else {
-        console.error("Telegram error:", result);
-        return false;
-      }
-    } catch(e) {
-      console.error("Gagal kirim notif:", e);
-      return false;
-    }
-  }
-
-  async function testTelegramNotif() {
-    if(!telegramConfig.botToken || !telegramConfig.chatId) {
-      alert('❌ Konfigurasi Telegram belum diisi! Pergi ke menu Setelan untuk mengisi Bot Token dan Chat ID.');
-      return;
-    }
-    const status = await sendTelegramNotification('🔔 *Test Notifikasi dari Owner Panel*\n\n✅ Jika Anda menerima pesan ini, konfigurasi Telegram berhasil!');
-    if(status) {
-      alert('✅ Notifikasi test berhasil dikirim! Cek Telegram Anda.');
-    } else {
-      alert('❌ Gagal mengirim notifikasi. Periksa Bot Token dan Chat ID Anda.');
-    }
-  }
-
-  function clearTelegramConfig() {
-    if(confirm('Hapus semua konfigurasi Telegram? Notifikasi akan berhenti bekerja.')) {
-      telegramConfig.botToken = '';
-      telegramConfig.chatId = '';
-      sessionStorage.removeItem('telegramBotToken');
-      sessionStorage.removeItem('telegramChatId');
-      document.getElementById('telegramBotTokenInput').value = '';
-      document.getElementById('telegramChatIdInput').value = '';
-      updateTelegramStatusDisplay();
-      alert('✅ Konfigurasi Telegram telah dihapus.');
-    }
-  }
-
-  let dbConfig = {
-    url: "https://wa-license-default-rtdb.asia-southeast1.firebasedatabase.app/",
-    paths: { premium_plus: "premium_plus", allowed_devices: "allowed_devices", trials: "trials", resellers: "resellers" }
-  };
-
+  let dbConfig = { url: "https://wa-license-default-rtdb.asia-southeast1.firebasedatabase.app/", paths: { premium_plus: "premium_plus", allowed_devices: "allowed_devices", trials: "trials", resellers: "resellers", blacklist: "blacklist" } };
   function getPath(node) { return `${dbConfig.url}${dbConfig.paths[node]}.json`; }
 
+  // BLACKLIST FUNCTIONS
+  async function fetchBlacklist() {
+    try { const res = await fetch(getPath('blacklist')); const data = await res.json(); let list = []; if(data && typeof data === 'object') { Object.entries(data).forEach(([deviceId, val]) => { if(val) list.push({ deviceId, ...val }); }); } return list; } catch(e) { return []; }
+  }
+  async function renderBlacklist() {
+    const container = document.getElementById('blacklistListContainer'); if(!container) return;
+    const search = document.getElementById('searchBlacklistInput')?.value.toLowerCase() || '';
+    let blacklist = await fetchBlacklist();
+    let filtered = blacklist.filter(b => b.deviceId.toLowerCase().includes(search) || (b.message && b.message.toLowerCase().includes(search)) || (b.title && b.title.toLowerCase().includes(search)));
+    if(filtered.length === 0) { container.innerHTML = '<div style="text-align:center; padding:20px;">Tidak ada perangkat diblacklist. Tambahkan blacklist baru.</div>'; return; }
+    container.innerHTML = filtered.map(b => `
+      <div class="user-card">
+        <div class="user-card-header"><span class="device-id"><i class="fas fa-skull-crosswalk"></i> ${b.deviceId}</span><span class="badge badge-blacklist">Diblokir</span></div>
+        <div class="user-detail"><span><i class="fas fa-heading"></i> Title: ${b.title || '🔒 Akses Ditolak'}</span><span><i class="fas fa-comment"></i> Pesan: ${b.message || 'Perangkat Anda telah diblokir'}</span></div>
+        <div class="user-detail"><span><i class="fas fa-smile"></i> Button Text: ${b.buttonText || 'Tutup'}</span><span><i class="fas fa-calendar"></i> Diblokir: ${b.createdAt ? new Date(b.createdAt).toLocaleDateString() : '-'}</span></div>
+        <div class="action-buttons"><button class="edit-btn" onclick='editBlacklist("${b.deviceId}")'><i class="fas fa-edit"></i> Edit</button><button class="unblacklist-btn" onclick='removeFromBlacklist("${b.deviceId}")'><i class="fas fa-check-circle"></i> Hapus Blacklist</button></div>
+      </div>
+    `).join('');
+  }
+  window.showAddBlacklistForm = async () => {
+    let deviceId = prompt("Masukkan Device ID yang akan diblacklist (contoh: device_id_user_A)");
+    if(!deviceId) return;
+    let title = prompt("Judul popup blokir (default: 🔒 Akses Ditolak)", "🔒 Akses Ditolak");
+    let message = prompt("Pesan peringatan", "Perangkat Anda telah diblokir oleh owner.");
+    let buttonText = prompt("Teks tombol", "Tutup");
+    if(!title) title = "🔒 Akses Ditolak"; if(!message) message = "Perangkat Anda telah diblokir."; if(!buttonText) buttonText = "Tutup";
+    const blacklistData = { title, message, buttonText, createdAt: Date.now(), createdBy: "owner" };
+    const currentData = await fetch(getPath('blacklist')).then(r=>r.json()).catch(()=>({}));
+    currentData[deviceId] = blacklistData;
+    await fetch(getPath('blacklist'), { method:'PUT', body:JSON.stringify(currentData), headers:{'Content-Type':'application/json'} });
+    await sendTelegramNotification(`🚫 *BLACKLIST DITAMBAHKAN*\n📱 Device: ${deviceId}\n👤 Oleh: Owner\n📝 Pesan: ${message}`);
+    renderBlacklist();
+    updateAllStats();
+    alert(`Device ${deviceId} berhasil diblacklist.`);
+  };
+  window.editBlacklist = async (deviceId) => {
+    let blacklist = await fetchBlacklist();
+    let item = blacklist.find(b => b.deviceId === deviceId);
+    if(!item) return;
+    let newTitle = prompt("Edit Judul", item.title);
+    let newMessage = prompt("Edit Pesan", item.message);
+    let newButton = prompt("Edit Teks Tombol", item.buttonText);
+    if(newTitle !== null && newMessage !== null && newButton !== null) {
+      const currentData = await fetch(getPath('blacklist')).then(r=>r.json());
+      if(currentData[deviceId]) { currentData[deviceId] = { ...currentData[deviceId], title: newTitle, message: newMessage, buttonText: newButton, updatedAt: Date.now() }; }
+      await fetch(getPath('blacklist'), { method:'PUT', body:JSON.stringify(currentData), headers:{'Content-Type':'application/json'} });
+      await sendTelegramNotification(`✏️ *BLACKLIST DIUPDATE*\n📱 Device: ${deviceId}\nPesan baru: ${newMessage}`);
+      renderBlacklist();
+    }
+  };
+  window.removeFromBlacklist = async (deviceId) => {
+    if(!confirm(`Hapus blacklist untuk device ${deviceId}? Akses akan dipulihkan.`)) return;
+    const currentData = await fetch(getPath('blacklist')).then(r=>r.json());
+    if(currentData && currentData[deviceId]) delete currentData[deviceId];
+    await fetch(getPath('blacklist'), { method:'PUT', body:JSON.stringify(currentData || {}), headers:{'Content-Type':'application/json'} });
+    await sendTelegramNotification(`✅ *BLACKLIST DIHAPUS*\n📱 Device: ${deviceId} sekarang dapat mengakses kembali.`);
+    renderBlacklist();
+    updateAllStats();
+  };
+  document.getElementById('searchBlacklistInput')?.addEventListener('input', () => renderBlacklist());
+
+  // Trial Listener
   let trialListenerRef = null;
   function setupTrialRealtimeListener() {
     if(trialListenerRef) trialListenerRef.off();
     const trialRef = firebase.database().ref(dbConfig.paths.trials);
     trialListenerRef = trialRef;
-    trialRef.on('child_added', (snapshot) => {
-      const newTrial = snapshot.val();
-      const deviceId = snapshot.key;
-      if(newTrial) {
-        const message = `🆕 *TRIAL BARU DIBUAT*\n📱 Device: ${deviceId}\n⏱ Durasi: ${newTrial.trialDurationMinutes || 30} menit\n🕐 Waktu: ${new Date().toLocaleString('id')}`;
-        sendTelegramNotification(message);
-        if(!document.getElementById('trialPage').classList.contains('hidden-section')) renderTrialListMobile();
-        updateAllStats();
-      }
-    });
-    trialRef.on('child_changed', (snapshot) => {
-      const updatedTrial = snapshot.val();
-      const deviceId = snapshot.key;
-      if(updatedTrial) {
-        const message = `✏️ *TRIAL DIUPDATE*\n📱 Device: ${deviceId}\n🕐 Update: ${new Date().toLocaleString('id')}`;
-        sendTelegramNotification(message);
-        if(!document.getElementById('trialPage').classList.contains('hidden-section')) renderTrialListMobile();
-        updateAllStats();
-      }
-    });
-    trialRef.on('child_removed', (snapshot) => {
-      const deviceId = snapshot.key;
-      const message = `🗑 *TRIAL DIHAPUS*\n📱 Device: ${deviceId}\n🕐 Dihapus: ${new Date().toLocaleString('id')}`;
-      sendTelegramNotification(message);
-      if(!document.getElementById('trialPage').classList.contains('hidden-section')) renderTrialListMobile();
-      updateAllStats();
-    });
+    trialRef.on('child_added', (snapshot) => { const newTrial = snapshot.val(); if(newTrial) { sendTelegramNotification(`🆕 *TRIAL BARU*\n📱 Device: ${snapshot.key}\n⏱ Durasi: ${newTrial.trialDurationMinutes || 30} menit`); if(!document.getElementById('trialPage').classList.contains('hidden-section')) renderTrialListMobile(); updateAllStats(); } });
+    trialRef.on('child_changed', (snapshot) => { if(snapshot.val()) { if(!document.getElementById('trialPage').classList.contains('hidden-section')) renderTrialListMobile(); updateAllStats(); } });
+    trialRef.on('child_removed', (snapshot) => { sendTelegramNotification(`🗑 *TRIAL DIHAPUS*\n📱 Device: ${snapshot.key}`); if(!document.getElementById('trialPage').classList.contains('hidden-section')) renderTrialListMobile(); updateAllStats(); });
   }
 
   firebase.auth().onAuthStateChanged(user => { if(user) showAppMobile(); else showLoginMobile(); });
-
-  function showLoginMobile() {
-    document.getElementById('loginContainer').classList.remove('hidden');
-    document.getElementById('appContainer').classList.add('hidden');
-  }
-  
-  function showAppMobile() {
-    document.getElementById('loginContainer').classList.add('hidden');
-    document.getElementById('appContainer').classList.remove('hidden');
-    setupTrialRealtimeListener();
-    updateAllStats();
-    showSectionMobile('dashboard');
-    attachNavEvents();
-    updateTelegramStatusDisplay();
-    // Load existing config ke form jika ada
-    if(telegramConfig.botToken) document.getElementById('telegramBotTokenInput').value = '•••••••• (tersimpan)';
-    if(telegramConfig.chatId) document.getElementById('telegramChatIdInput').value = telegramConfig.chatId;
-  }
-
-  function attachNavEvents() {
-    document.querySelectorAll('.nav-item').forEach(btn => {
-      btn.onclick = () => { showSectionMobile(btn.dataset.section); };
-    });
-  }
-
+  function showLoginMobile() { document.getElementById('loginContainer').classList.remove('hidden'); document.getElementById('appContainer').classList.add('hidden'); }
+  function showAppMobile() { document.getElementById('loginContainer').classList.add('hidden'); document.getElementById('appContainer').classList.remove('hidden'); setupTrialRealtimeListener(); updateAllStats(); showSectionMobile('dashboard'); attachNavEvents(); updateTelegramStatusDisplay(); if(telegramConfig.botToken) document.getElementById('telegramBotTokenInput').value = '•••••••• (tersimpan)'; if(telegramConfig.chatId) document.getElementById('telegramChatIdInput').value = telegramConfig.chatId; }
+  function attachNavEvents() { document.querySelectorAll('.nav-item').forEach(btn => { btn.onclick = () => { showSectionMobile(btn.dataset.section); }; }); }
   function showSectionMobile(sectionId) {
     document.querySelectorAll('.content-section').forEach(sec => sec.classList.add('hidden-section'));
     document.getElementById(sectionId).classList.remove('hidden-section');
     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-    const activeNav = document.querySelector(`.nav-item[data-section="${sectionId}"]`);
-    if(activeNav) activeNav.classList.add('active');
+    const activeNav = document.querySelector(`.nav-item[data-section="${sectionId}"]`); if(activeNav) activeNav.classList.add('active');
     if(sectionId === 'dashboard') updateAllStats();
     else if(sectionId === 'premiumPlus') renderPremiumListMobile('premium_plus', 'premiumPlusList', 'searchPlusMobile', 'statusPlusMobile');
     else if(sectionId === 'premiumStandart') renderPremiumListMobile('allowed_devices', 'premiumStandartList', 'searchStandartMobile', 'statusStandartMobile');
     else if(sectionId === 'trialPage') renderTrialListMobile();
     else if(sectionId === 'resellerPage') renderResellerList();
+    else if(sectionId === 'blacklistPage') renderBlacklist();
   }
 
-  // Settings Telegram form submit
-  document.getElementById('telegramSettingsForm')?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const botToken = document.getElementById('telegramBotTokenInput').value.trim();
-    const chatId = document.getElementById('telegramChatIdInput').value.trim();
-    if(botToken && chatId) {
-      telegramConfig.botToken = botToken;
-      telegramConfig.chatId = chatId;
-      saveTelegramConfigToSession();
-      alert('✅ Konfigurasi Telegram disimpan! (hanya untuk sesi ini, akan hilang setelah logout)');
-      document.getElementById('telegramBotTokenInput').value = '•••••••• (tersimpan)';
-    } else {
-      alert('❌ Bot Token dan Chat ID harus diisi!');
-    }
-  });
+  document.getElementById('telegramSettingsForm')?.addEventListener('submit', (e) => { e.preventDefault(); const botToken = document.getElementById('telegramBotTokenInput').value.trim(); const chatId = document.getElementById('telegramChatIdInput').value.trim(); if(botToken && chatId) { telegramConfig.botToken = botToken; telegramConfig.chatId = chatId; saveTelegramConfigToSession(); alert('✅ Konfigurasi Telegram disimpan (sesi ini)'); document.getElementById('telegramBotTokenInput').value = '•••••••• (tersimpan)'; } else alert('❌ Lengkapi Bot Token & Chat ID'); });
 
-  // ========== RESELLER FUNCTIONS ==========
-  async function fetchResellers() {
-    try {
-      const res = await fetch(getPath('resellers'));
-      const data = await res.json();
-      let list = [];
-      if(data && typeof data === 'object') {
-        Object.entries(data).forEach(([k, v]) => { if(v) list.push({ resellerId: k, ...v }); });
-      }
-      return list;
-    } catch(e) { return []; }
-  }
-
-  async function renderResellerList() {
-    const container = document.getElementById('resellerListContainer');
-    const search = document.getElementById('searchResellerInput').value.toLowerCase();
-    let resellers = await fetchResellers();
-    let filtered = resellers.filter(r => r.resellerId.toLowerCase().includes(search) || (r.code && r.code.toLowerCase().includes(search)));
-    if(filtered.length === 0) {
-      container.innerHTML = '<div style="text-align:center; padding:20px;">Tidak ada reseller, klik tambah reseller.</div>';
-      return;
-    }
-    container.innerHTML = filtered.map(r => `
-      <div class="user-card">
-        <div class="user-card-header"><span class="device-id"><i class="fas fa-tags"></i> ${r.resellerId}</span><span class="badge badge-reseller">Reseller</span></div>
-        <div class="user-detail"><span><i class="fas fa-code"></i> Kode: ${r.code || '-'}</span><span><i class="fas fa-percent"></i> Diskon: ${r.discountPercent || 0}%</span></div>
-        <div class="user-detail"><span><i class="fas fa-user"></i> Nama: ${r.name || '-'}</span><span><i class="fas fa-phone"></i> Kontak: ${r.contact || '-'}</span></div>
-        <div class="action-buttons"><button class="edit-btn" onclick='editReseller("${r.resellerId}")'><i class="fas fa-edit"></i> Edit</button><button class="delete-btn" onclick='deleteReseller("${r.resellerId}")'><i class="fas fa-trash"></i> Hapus</button></div>
-      </div>
-    `).join('');
-  }
-
-  window.showAddResellerForm = () => {
-    let newId = prompt("Masukkan ID Reseller unik");
-    if(!newId) return;
-    let code = prompt("Kode reseller");
-    let name = prompt("Nama reseller");
-    let contact = prompt("Kontak (opsional)");
-    let discount = parseInt(prompt("Diskon persen (0-100)", "10"));
-    if(isNaN(discount)) discount = 0;
-    const resellerData = { code: code || newId, name: name || "Reseller Baru", contact: contact || "", discountPercent: Math.min(100, Math.max(0, discount)), createdAt: Date.now(), createdBy: "owner" };
-    fetch(getPath('resellers'), { method: 'GET' }).then(res => res.json()).then(existing => {
-      let updates = existing || {};
-      updates[newId] = resellerData;
-      fetch(getPath('resellers'), { method: 'PUT', body: JSON.stringify(updates), headers:{'Content-Type':'application/json'} })
-        .then(() => { alert("Reseller berhasil ditambahkan"); renderResellerList(); updateAllStats(); });
-    });
-  };
-
-  window.editReseller = async (resellerId) => {
-    let resellers = await fetchResellers();
-    let reseller = resellers.find(r => r.resellerId === resellerId);
-    if(!reseller) return;
-    let newName = prompt("Edit Nama Reseller", reseller.name);
-    let newCode = prompt("Edit Kode Reseller", reseller.code);
-    let newContact = prompt("Edit Kontak", reseller.contact);
-    let newDiscount = prompt("Edit Diskon (%)", reseller.discountPercent);
-    if(newName !== null && newCode !== null) {
-      const updated = { ...reseller, name: newName, code: newCode, contact: newContact || "", discountPercent: parseInt(newDiscount) || 0 };
-      const currentData = await fetch(getPath('resellers')).then(r=>r.json());
-      currentData[resellerId] = updated;
-      await fetch(getPath('resellers'), { method:'PUT', body:JSON.stringify(currentData), headers:{'Content-Type':'application/json'} });
-      renderResellerList();
-      updateAllStats();
-    }
-  };
-
-  window.deleteReseller = async (resellerId) => {
-    if(!confirm(`Hapus reseller ${resellerId}?`)) return;
-    const currentData = await fetch(getPath('resellers')).then(r=>r.json());
-    if(currentData && currentData[resellerId]) delete currentData[resellerId];
-    await fetch(getPath('resellers'), { method:'PUT', body:JSON.stringify(currentData || {}), headers:{'Content-Type':'application/json'} });
-    renderResellerList();
-    updateAllStats();
-  };
-
+  // RESELLER
+  async function fetchResellers() { try { const res = await fetch(getPath('resellers')); const data = await res.json(); let list=[]; if(data && typeof data === 'object') Object.entries(data).forEach(([k,v])=>list.push({ resellerId: k, ...v })); return list; } catch(e){return [];} }
+  async function renderResellerList() { const container = document.getElementById('resellerListContainer'); const search = document.getElementById('searchResellerInput').value.toLowerCase(); let resellers = await fetchResellers(); let filtered = resellers.filter(r => r.resellerId.toLowerCase().includes(search) || (r.code && r.code.toLowerCase().includes(search))); if(filtered.length===0) { container.innerHTML = '<div style="text-align:center; padding:20px;">Tidak ada reseller</div>'; return; } container.innerHTML = filtered.map(r => `<div class="user-card"><div class="user-card-header"><span class="device-id"><i class="fas fa-tags"></i> ${r.resellerId}</span><span class="badge badge-reseller">Reseller</span></div><div class="user-detail"><span>Kode: ${r.code || '-'}</span><span>Diskon: ${r.discountPercent || 0}%</span></div><div class="user-detail"><span>Nama: ${r.name || '-'}</span><span>Kontak: ${r.contact || '-'}</span></div><div class="action-buttons"><button class="edit-btn" onclick='editReseller("${r.resellerId}")'>Edit</button><button class="delete-btn" onclick='deleteReseller("${r.resellerId}")'>Hapus</button></div></div>`).join(''); }
+  window.showAddResellerForm = () => { let newId = prompt("ID Reseller unik"); if(!newId) return; let code = prompt("Kode reseller"); let name = prompt("Nama"); let contact = prompt("Kontak"); let discount = parseInt(prompt("Diskon %", "10")); if(isNaN(discount)) discount=0; const resellerData = { code: code || newId, name: name || "Reseller", contact: contact || "", discountPercent: Math.min(100, Math.max(0, discount)), createdAt: Date.now() }; fetch(getPath('resellers')).then(r=>r.json()).then(existing => { let updates = existing || {}; updates[newId] = resellerData; fetch(getPath('resellers'), { method:'PUT', body:JSON.stringify(updates), headers:{'Content-Type':'application/json'} }).then(()=>{ alert("Reseller ditambahkan"); renderResellerList(); updateAllStats(); }); }); };
+  window.editReseller = async (id) => { let resellers = await fetchResellers(); let r = resellers.find(r=>r.resellerId===id); if(!r) return; let newName = prompt("Edit Nama", r.name); let newCode = prompt("Edit Kode", r.code); let newContact = prompt("Kontak", r.contact); let newDiscount = prompt("Diskon", r.discountPercent); if(newName) { const current = await fetch(getPath('resellers')).then(r=>r.json()); current[id] = { ...r, name: newName, code: newCode, contact: newContact, discountPercent: parseInt(newDiscount) || 0 }; await fetch(getPath('resellers'), { method:'PUT', body:JSON.stringify(current), headers:{'Content-Type':'application/json'} }); renderResellerList(); updateAllStats(); } };
+  window.deleteReseller = async (id) => { if(!confirm(`Hapus reseller ${id}?`)) return; const current = await fetch(getPath('resellers')).then(r=>r.json()); if(current && current[id]) delete current[id]; await fetch(getPath('resellers'), { method:'PUT', body:JSON.stringify(current||{}), headers:{'Content-Type':'application/json'} }); renderResellerList(); updateAllStats(); };
   document.getElementById('searchResellerInput')?.addEventListener('input', () => renderResellerList());
 
-  // ========== OTHER FUNCTIONS ==========
-  async function updateAllStats() {
-    try {
-      const plus = await fetch(getPath('premium_plus')).then(r=>r.json());
-      const stand = await fetch(getPath('allowed_devices')).then(r=>r.json());
-      let totalPlus=0,totalStand=0,active=0,expired=0;
-      const now=Date.now();
-      if(plus?.premium_plus) { let items=Object.values(plus.premium_plus); totalPlus=items.length; items.forEach(i=>{ if(i.expiry_time>now) active++; else expired++; }); }
-      if(stand?.allowed_devices) { let items=Object.values(stand.allowed_devices); totalStand=items.length; items.forEach(i=>{ if(i.expiry_time>now) active++; else expired++; }); }
-      document.getElementById('totalPremiumPlus').innerText=totalPlus;
-      document.getElementById('totalPremiumStandart').innerText=totalStand;
-      document.getElementById('activePremium').innerText=active;
-      document.getElementById('expiredPremium').innerText=expired;
-      const trials = await fetchTrialsData();
-      let aktifTrial=0, expiredTrial=0;
-      trials.forEach(t=>{ let expiry = t.trialExpiryTime || (t.trialStartTime + (t.trialDurationMinutes*60000)); if(expiry>Date.now()) aktifTrial++; else expiredTrial++; });
-      document.getElementById('activeTrials').innerText=aktifTrial;
-      document.getElementById('expiredTrials').innerText=expiredTrial;
-      const resellers = await fetchResellers();
-      document.getElementById('totalResellers').innerText = resellers.length;
-    } catch(e){}
-  }
-
-  async function fetchTrialsData() {
-    try {
-      const res = await fetch(getPath('trials'));
-      const data = await res.json();
-      let list=[];
-      if(data && typeof data === 'object'){ Object.entries(data).forEach(([did, val])=>{ if(val) list.push({ deviceId: did, ...val }); }); }
-      return list;
-    } catch(e){ return []; }
-  }
-
-  async function renderTrialListMobile() {
-    const trials = await fetchTrialsData();
-    const container = document.getElementById('trialListContainer');
-    const search = document.getElementById('searchTrialMobile').value.toLowerCase();
-    const filterStat = document.getElementById('statusTrialMobile').value;
-    const now = Date.now();
-    let filtered = trials.filter(t => {
-      let expiry = t.trialExpiryTime || (t.trialStartTime + (t.trialDurationMinutes*60000));
-      let isExpired = expiry < now;
-      let matchSearch = t.deviceId.toLowerCase().includes(search);
-      let matchStatus = (filterStat==='' || (filterStat==='active' && !isExpired) || (filterStat==='expired' && isExpired));
-      return matchSearch && matchStatus;
-    });
-    if(filtered.length===0) { container.innerHTML='<div style="text-align:center; padding:20px;">Tidak ada data trial</div>'; return; }
-    container.innerHTML = filtered.map(t => {
-      let start = t.trialStartTime || t.startTime;
-      let duration = t.trialDurationMinutes || 30;
-      let expiry = start ? start + (duration*60000) : (t.trialExpiryTime || 0);
-      let isExpired = expiry < now;
-      return `<div class="user-card"><div class="user-card-header"><span class="device-id">📱 ${t.deviceId}</span><span class="badge ${isExpired ? 'badge-trial-expired' : 'badge-trial'}">${isExpired ? 'Expired' : 'Trial Aktif'}</span></div><div class="user-detail"><span>Durasi: ${duration} menit</span><span>Mulai: ${start ? new Date(start).toLocaleString() : '-'}</span></div><div class="user-detail"><span>Berakhir: ${expiry ? new Date(expiry).toLocaleString() : '-'}</span></div><div class="action-buttons"><button class="delete-btn" onclick='deleteTrialDeviceMobile("${t.deviceId}")'><i class="fas fa-trash"></i> Hapus Trial</button></div></div>`;
-    }).join('');
-  }
-
-  window.deleteTrialDeviceMobile = async (deviceId) => {
-    if(!confirm(`Hapus trial device ${deviceId}?`)) return;
-    await sendTelegramNotification(`🗑️ *TRIAL DIHAPUS MANUAL*\n📱 Device: ${deviceId}\n👤 Dihapus oleh: Owner`);
-    const res = await fetch(getPath('trials'));
-    let data = await res.json();
-    if(data && data[deviceId]) delete data[deviceId];
-    await fetch(getPath('trials'), { method:'PUT', body:JSON.stringify(data), headers:{'Content-Type':'application/json'} });
-    renderTrialListMobile();
-    updateAllStats();
-  };
-
-  async function renderPremiumListMobile(type, containerId, searchId, filterId) {
-    const res = await fetch(getPath(type));
-    const data = await res.json();
-    const container = document.getElementById(containerId);
-    if(!data || !data[type]) { container.innerHTML = '<div>No data</div>'; return; }
-    const now = Date.now();
-    const isPlus = (type === 'premium_plus');
-    const badgeClass = isPlus ? 'badge-premium-plus' : 'badge-premium-standart';
-    const labelType = isPlus ? 'Premium Plus' : 'Premium Standart';
-    let users = Object.entries(data[type]).map(([id, val]) => ({ deviceId: id, ...val }));
-    const filterAndRender = () => {
-      const searchTerm = document.getElementById(searchId)?.value.toLowerCase() || '';
-      const statusVal = document.getElementById(filterId)?.value || '';
-      let filtered = users.filter(u => {
-        let expired = u.expiry_time < now;
-        let matchSearch = u.deviceId.toLowerCase().includes(searchTerm) || (u.name && u.name.toLowerCase().includes(searchTerm));
-        let matchStatus = !statusVal || (statusVal === 'active' && !expired) || (statusVal === 'expired' && expired);
-        return matchSearch && matchStatus;
-      });
-      if(filtered.length===0) { container.innerHTML = '<div style="padding:20px;">Tidak ada data</div>'; return; }
-      container.innerHTML = filtered.map(u => `<div class="user-card"><div class="user-card-header"><span class="device-id">${u.deviceId}</span><span class="badge ${u.expiry_time < now ? 'badge-expired' : badgeClass}">${u.expiry_time < now ? 'Expired' : labelType}</span></div><div class="user-detail"><span>👤 ${u.name || '-'}</span><span>📅 Exp: ${new Date(u.expiry_time).toLocaleDateString()}</span></div><div class="action-buttons"><button class="edit-btn" onclick='editPremiumMobile("${u.deviceId}","${type}")'>Edit</button><button class="delete-btn" onclick='deletePremiumMobile("${u.deviceId}","${type}")'>Hapus</button></div></div>`).join('');
-    };
-    filterAndRender();
-    document.getElementById(searchId).oninput = filterAndRender;
-    document.getElementById(filterId).onchange = filterAndRender;
-  }
-
-  window.editPremiumMobile = async (deviceId, type) => {
-    const res = await fetch(getPath(type));
-    let data = await res.json();
-    let user = data[type][deviceId];
-    let newName = prompt('Edit nama', user.name);
-    if(newName === null) return;
-    let newExpiryStr = prompt('Edit expiry (YYYY-MM-DD)', new Date(user.expiry_time).toISOString().split('T')[0]);
-    let newExpiry = new Date(newExpiryStr).getTime();
-    if(isNaN(newExpiry)) newExpiry = user.expiry_time;
-    data[type][deviceId] = { ...user, name: newName, expiry_time: newExpiry };
-    await fetch(getPath(type), { method:'PUT', body:JSON.stringify(data), headers:{'Content-Type':'application/json'} });
-    if(type==='premium_plus') renderPremiumListMobile('premium_plus','premiumPlusList','searchPlusMobile','statusPlusMobile');
-    else renderPremiumListMobile('allowed_devices','premiumStandartList','searchStandartMobile','statusStandartMobile');
-    updateAllStats();
-  };
-
-  window.deletePremiumMobile = async (deviceId, type) => {
-    if(!confirm(`Hapus premium ${deviceId}?`)) return;
-    const res = await fetch(getPath(type));
-    let data = await res.json();
-    delete data[type][deviceId];
-    await fetch(getPath(type), { method:'PUT', body:JSON.stringify(data), headers:{'Content-Type':'application/json'} });
-    if(type==='premium_plus') renderPremiumListMobile('premium_plus','premiumPlusList','searchPlusMobile','statusPlusMobile');
-    else renderPremiumListMobile('allowed_devices','premiumStandartList','searchStandartMobile','statusStandartMobile');
-    updateAllStats();
-  };
-
-  document.getElementById('addPremiumFormMobile').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    let type = document.getElementById('premiumTypeMobile').value;
-    let deviceId = document.getElementById('deviceIdMobile').value.trim();
-    let name = document.getElementById('nameMobile').value.trim();
-    let expiryDate = new Date(document.getElementById('expiryDateMobile').value);
-    expiryDate.setHours(23,59,59,999);
-    let status = document.getElementById('statusMobile').value;
-    let res = await fetch(getPath(type));
-    let data = await res.json();
-    if(!data[type]) data[type] = {};
-    data[type][deviceId] = { name, expiry_time: expiryDate.getTime(), status, created_at: Date.now() };
-    await fetch(getPath(type), { method:'PUT', body:JSON.stringify(data), headers:{'Content-Type':'application/json'} });
-    alert('Premium ditambahkan');
-    e.target.reset();
-    updateAllStats();
-    showSectionMobile('premiumPlus');
-  });
-
-  function logoutMobile() { 
-    if(trialListenerRef) trialListenerRef.off();
-    // Hapus session Telegram (logout = hilang konfigurasi)
-    sessionStorage.removeItem('telegramBotToken');
-    sessionStorage.removeItem('telegramChatId');
-    telegramConfig.botToken = '';
-    telegramConfig.chatId = '';
-    firebase.auth().signOut(); 
-  }
-
-  document.getElementById('loginForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    let email = document.getElementById('loginEmail').value;
-    let pass = document.getElementById('loginPassword').value;
-    firebase.auth().signInWithEmailAndPassword(email, pass).catch(err => document.getElementById('loginError').innerText = err.message);
-  });
-  
-  document.getElementById('searchTrialMobile')?.addEventListener('input', () => renderTrialListMobile());
-  document.getElementById('statusTrialMobile')?.addEventListener('change', () => renderTrialListMobile());
+  // STATS & PREMIUM FUNCTIONS
+  async function updateAllStats() { try { const plus = await fetch(getPath('premium_plus')).then(r=>r.json()); const stand = await fetch(getPath('allowed_devices')).then(r=>r.json()); let totalPlus=0,totalStand=0,active=0,expired=0,now=Date.now(); if(plus?.premium_plus) { let items=Object.values(plus.premium_plus); totalPlus=items.length; items.forEach(i=>{ if(i.expiry_time>now) active++; else expired++; }); } if(stand?.allowed_devices) { let items=Object.values(stand.allowed_devices); totalStand=items.length; items.forEach(i=>{ if(i.expiry_time>now) active++; else expired++; }); } document.getElementById('totalPremiumPlus').innerText=totalPlus; document.getElementById('totalPremiumStandart').innerText=totalStand; document.getElementById('activePremium').innerText=active; document.getElementById('expiredPremium').innerText=expired; const trials = await fetchTrialsData(); let aktifTrial=0, expiredTrial=0; trials.forEach(t=>{ let expiry = t.trialExpiryTime || (t.trialStartTime + (t.trialDurationMinutes*60000)); if(expiry>now) aktifTrial++; else expiredTrial++; }); document.getElementById('activeTrials').innerText=aktifTrial; document.getElementById('expiredTrials').innerText=expiredTrial; const resellers = await fetchResellers(); document.getElementById('totalResellers').innerText = resellers.length; const blacklist = await fetchBlacklist(); document.getElementById('totalBlacklist').innerText = blacklist.length; } catch(e){} }
+  async function fetchTrialsData() { try { const res = await fetch(getPath('trials')); const data = await res.json(); let list=[]; if(data && typeof data === 'object'){ Object.entries(data).forEach(([did, val])=>{ if(val) list.push({ deviceId: did, ...val }); }); } return list; } catch(e){ return []; } }
+  async function renderTrialListMobile() { const trials = await fetchTrialsData(); const container = document.getElementById('trialListContainer'); const search = document.getElementById('searchTrialMobile').value.toLowerCase(); const filterStat = document.getElementById('statusTrialMobile').value; const now = Date.now(); let filtered = trials.filter(t => { let expiry = t.trialExpiryTime || (t.trialStartTime + (t.trialDurationMinutes*60000)); let isExpired = expiry < now; let matchSearch = t.deviceId.toLowerCase().includes(search); let matchStatus = (filterStat==='' || (filterStat==='active' && !isExpired) || (filterStat==='expired' && isExpired)); return matchSearch && matchStatus; }); if(filtered.length===0) { container.innerHTML='<div style="padding:20px;">Tidak ada data trial</div>'; return; } container.innerHTML = filtered.map(t => { let start = t.trialStartTime || t.startTime; let duration = t.trialDurationMinutes || 30; let expiry = start ? start + (duration*60000) : (t.trialExpiryTime || 0); let isExpired = expiry < now; return `<div class="user-card"><div class="user-card-header"><span class="device-id">📱 ${t.deviceId}</span><span class="badge ${isExpired ? 'badge-trial-expired' : 'badge-trial'}">${isExpired ? 'Expired' : 'Trial Aktif'}</span></div><div class="user-detail"><span>Durasi: ${duration} menit</span><span>Mulai: ${start ? new Date(start).toLocaleString() : '-'}</span></div><div class="user-detail"><span>Berakhir: ${expiry ? new Date(expiry).toLocaleString() : '-'}</span></div><div class="action-buttons"><button class="delete-btn" onclick='deleteTrialDeviceMobile("${t.deviceId}")'>Hapus Trial</button></div></div>`; }).join(''); }
+  window.deleteTrialDeviceMobile = async (deviceId) => { if(!confirm(`Hapus trial ${deviceId}?`)) return; await sendTelegramNotification(`🗑️ TRIAL DIHAPUS: ${deviceId}`); const res = await fetch(getPath('trials')); let data = await res.json(); if(data && data[deviceId]) delete data[deviceId]; await fetch(getPath('trials'), { method:'PUT', body:JSON.stringify(data), headers:{'Content-Type':'application/json'} }); renderTrialListMobile(); updateAllStats(); };
+  async function renderPremiumListMobile(type, containerId, searchId, filterId) { const res = await fetch(getPath(type)); const data = await res.json(); const container = document.getElementById(containerId); if(!data || !data[type]) { container.innerHTML = '<div>No data</div>'; return; } const now = Date.now(); const isPlus = (type === 'premium_plus'); const badgeClass = isPlus ? 'badge-premium-plus' : 'badge-premium-standart'; const labelType = isPlus ? 'Premium Plus' : 'Premium Standart'; let users = Object.entries(data[type]).map(([id, val]) => ({ deviceId: id, ...val })); const filterAndRender = () => { const searchTerm = document.getElementById(searchId)?.value.toLowerCase() || ''; const statusVal = document.getElementById(filterId)?.value || ''; let filtered = users.filter(u => { let expired = u.expiry_time < now; let matchSearch = u.deviceId.toLowerCase().includes(searchTerm) || (u.name && u.name.toLowerCase().includes(searchTerm)); let matchStatus = !statusVal || (statusVal === 'active' && !expired) || (statusVal === 'expired' && expired); return matchSearch && matchStatus; }); if(filtered.length===0) { container.innerHTML = '<div style="padding:20px;">Tidak ada data</div>'; return; } container.innerHTML = filtered.map(u => `<div class="user-card"><div class="user-card-header"><span class="device-id">${u.deviceId}</span><span class="badge ${u.expiry_time < now ? 'badge-expired' : badgeClass}">${u.expiry_time < now ? 'Expired' : labelType}</span></div><div class="user-detail"><span>👤 ${u.name || '-'}</span><span>📅 Exp: ${new Date(u.expiry_time).toLocaleDateString()}</span></div><div class="action-buttons"><button class="edit-btn" onclick='editPremiumMobile("${u.deviceId}","${type}")'>Edit</button><button class="delete-btn" onclick='deletePremiumMobile("${u.deviceId}","${type}")'>Hapus</button></div></div>`).join(''); }; filterAndRender(); document.getElementById(searchId).oninput = filterAndRender; document.getElementById(filterId).onchange = filterAndRender; }
+  window.editPremiumMobile = async (deviceId, type) => { const res = await fetch(getPath(type)); let data = await res.json(); let user = data[type][deviceId]; let newName = prompt('Edit nama', user.name); if(newName === null) return; let newExpiryStr = prompt('Edit expiry (YYYY-MM-DD)', new Date(user.expiry_time).toISOString().split('T')[0]); let newExpiry = new Date(newExpiryStr).getTime(); if(isNaN(newExpiry)) newExpiry = user.expiry_time; data[type][deviceId] = { ...user, name: newName, expiry_time: newExpiry }; await fetch(getPath(type), { method:'PUT', body:JSON.stringify(data), headers:{'Content-Type':'application/json'} }); if(type==='premium_plus') renderPremiumListMobile('premium_plus','premiumPlusList','searchPlusMobile','statusPlusMobile'); else renderPremiumListMobile('allowed_devices','premiumStandartList','searchStandartMobile','statusStandartMobile'); updateAllStats(); };
+  window.deletePremiumMobile = async (deviceId, type) => { if(!confirm(`Hapus premium ${deviceId}?`)) return; const res = await fetch(getPath(type)); let data = await res.json(); delete data[type][deviceId]; await fetch(getPath(type), { method:'PUT', body:JSON.stringify(data), headers:{'Content-Type':'application/json'} }); if(type==='premium_plus') renderPremiumListMobile('premium_plus','premiumPlusList','searchPlusMobile','statusPlusMobile'); else renderPremiumListMobile('allowed_devices','premiumStandartList','searchStandartMobile','statusStandartMobile'); updateAllStats(); };
+  document.getElementById('addPremiumFormMobile').addEventListener('submit', async (e) => { e.preventDefault(); let type = document.getElementById('premiumTypeMobile').value; let deviceId = document.getElementById('deviceIdMobile').value.trim(); let name = document.getElementById('nameMobile').value.trim(); let expiryDate = new Date(document.getElementById('expiryDateMobile').value); expiryDate.setHours(23,59,59,999); let status = document.getElementById('statusMobile').value; let res = await fetch(getPath(type)); let data = await res.json(); if(!data[type]) data[type] = {}; data[type][deviceId] = { name, expiry_time: expiryDate.getTime(), status, created_at: Date.now() }; await fetch(getPath(type), { method:'PUT', body:JSON.stringify(data), headers:{'Content-Type':'application/json'} }); alert('Premium ditambahkan'); e.target.reset(); updateAllStats(); showSectionMobile('premiumPlus'); });
+  function logoutMobile() { if(trialListenerRef) trialListenerRef.off(); sessionStorage.removeItem('telegramBotToken'); sessionStorage.removeItem('telegramChatId'); telegramConfig.botToken = ''; telegramConfig.chatId = ''; firebase.auth().signOut(); }
+  document.getElementById('loginForm').addEventListener('submit', (e) => { e.preventDefault(); let email = document.getElementById('loginEmail').value; let pass = document.getElementById('loginPassword').value; firebase.auth().signInWithEmailAndPassword(email, pass).catch(err => document.getElementById('loginError').innerText = err.message); });
+  document.getElementById('searchTrialMobile')?.addEventListener('input', () => renderTrialListMobile()); document.getElementById('statusTrialMobile')?.addEventListener('change', () => renderTrialListMobile());
 </script>
 </body>
 </html>
