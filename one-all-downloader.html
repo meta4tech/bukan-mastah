@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZenPeak Downloader — Universal</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; }
+
+  :root {
+    --bg: #06060a;
+    --surface: rgba(20, 20, 30, 0.65);
+    --surface-solid: #14141e;
+    --surface-2: rgba(28, 28, 40, 0.8);
+    --border: rgba(120, 120, 160, 0.15);
+    --border-hover: rgba(124, 58, 237, 0.5);
+    --text: #f4f4f8;
+    --muted: #8b8b9e;
+    --accent: #7c3aed;
+    --accent-2: #06b6d4;
+    --accent-3: #f43f5e;
+    --success: #10b981;
+    --error: #ef4444;
+    --glow-purple: rgba(124, 58, 237, 0.4);
+    --glow-cyan: rgba(6, 182, 212, 0.3);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 16px 100px;
+    position: relative;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== ANIMATED BACKGROUND ===== */
+  .bg-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(circle at 15% 15%, rgba(124,58,237,.15), transparent 45%),
+      radial-gradient(circle at 85% 85%, rgba(6,182,212,.12), transparent 45%),
+      radial-gradient(circle at 50% 50%, rgba(244,63,94,.05), transparent 60%);
+    animation: bgShift 20s ease-in-out infinite;
+  }
+  @keyframes bgShift {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    50% { transform: scale(1.15) rotate(3deg); opacity: .8; }
+  }
+
+  .grid-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(rgba(124,58,237,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,58,237,.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+    animation: gridFloat 30s linear infinite;
+  }
+  @keyframes gridFloat {
+    from { background-position: 0 0, 0 0; }
+    to { background-position: 48px 48px, 48px 48px; }
+  }
+
+  /* ===== FLOATING PARTICLES ===== */
+  .particle {
+    position: fixed;
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: var(--accent-2);
+    box-shadow: 0 0 10px var(--accent-2);
+    pointer-events: none;
+    z-index: -1;
+    animation: floatUp linear infinite;
+    opacity: 0;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+    10% { opacity: .7; }
+    90% { opacity: .7; }
+    100% { transform: translateY(-10vh) translateX(40px); opacity: 0; }
+  }
+
+  /* ===== HEADER ===== */
+  .header-wrap { text-align: center; margin-bottom: 32px; animation: fadeUp .8s cubic-bezier(.2,.8,.2,1) both; }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding: 10px 22px 10px 12px;
+    background: var(--surface);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    position: relative;
+    overflow: hidden;
+    transition: all .4s cubic-bezier(.2,.8,.2,1);
+  }
+  .brand::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(124,58,237,.15), transparent);
+    transform: translateX(-100%);
+    animation: shimmer 3s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0%, 100% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+  }
+  .brand:hover { border-color: var(--border-hover); box-shadow: 0 0 40px rgba(124,58,237,.2); }
+
+  .brand-icon {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    box-shadow: 0 0 20px var(--glow-purple);
+    animation: pulseIcon 3s ease-in-out infinite;
+    position: relative;
+    z-index: 1;
+  }
+  @keyframes pulseIcon {
+    0%, 100% { box-shadow: 0 0 20px var(--glow-purple); transform: scale(1); }
+    50% { box-shadow: 0 0 32px var(--glow-purple), 0 0 50px var(--glow-cyan); transform: scale(1.05); }
+  }
+
+  .brand-text {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -.04em;
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(90deg, #fff 30%, #a78bfa 60%, #fff 90%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textShimmer 4s linear infinite;
+  }
+  @keyframes textShimmer {
+    to { background-position: 200% center; }
+  }
+  .brand-text span {
+    background: linear-gradient(135deg, var(--accent-2), #22d3ee);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .tagline {
+    color: var(--muted);
+    font-size: .9rem;
+    letter-spacing: .04em;
+    font-weight: 500;
+    animation: fadeUp .8s .15s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .tagline .dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--success);
+    margin: 0 8px;
+    box-shadow: 0 0 10px var(--success);
+    animation: blink 2s ease-in-out infinite;
+    vertical-align: middle;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
+
+  /* ===== CHIPS ===== */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 30px;
+    max-width: 620px;
+    animation: fadeUp .8s .25s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .chip {
+    font-size: .73rem;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--surface);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    transition: all .35s cubic-bezier(.2,.8,.2,1);
+    font-weight: 500;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+  .chip::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    opacity: 0;
+    transition: opacity .3s;
+    z-index: -1;
+  }
+  .chip:hover {
+    border-color: var(--border-hover);
+    color: #fff;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(124,58,237,.3);
+  }
+  .chip:hover::before { opacity: .2; }
+
+  /* ===== MAIN CARD ===== */
+  .card {
+    background: var(--surface);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 28px;
+    width: 100%;
+    max-width: 620px;
+    box-shadow:
+      0 24px 80px rgba(0,0,0,.6),
+      inset 0 1px 0 rgba(255,255,255,.05);
+    position: relative;
+    animation: fadeUp .8s .35s cubic-bezier(.2,.8,.2,1) both;
+    transition: box-shadow .4s;
+  }
+  .card:hover { box-shadow: 0 24px 100px rgba(124,58,237,.15), 0 24px 80px rgba(0,0,0,.6); }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent, var(--accent), var(--accent-2), transparent);
+    opacity: .8;
+  }
+
+  /* ===== INPUT ===== */
+  .input-group {
+    display: flex;
+    gap: 10px;
+    background: rgba(6,6,10,.6);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 6px;
+    transition: all .35s cubic-bezier(.2,.8,.2,1);
+    position: relative;
+  }
+  .input-group:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(124,58,237,.12), 0 0 30px rgba(124,58,237,.15);
+    background: rgba(6,6,10,.8);
+  }
+
+  input[type="text"] {
+    flex: 1;
+    padding: 13px 16px;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    font-size: .93rem;
+    outline: none;
+    font-weight: 500;
+  }
+  input::placeholder { color: #55556a; font-weight: 400; }
+
+  .btn-primary {
+    padding: 13px 24px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: .9rem;
+    transition: all .3s cubic-bezier(.2,.8,.2,1);
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    letter-spacing: .02em;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+    transition: left .6s;
+  }
+  .btn-primary:hover:not(:disabled)::before { left: 100%; }
+  .btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(124,58,237,.5), 0 0 20px rgba(6,182,212,.3);
+  }
+  .btn-primary:active:not(:disabled) { transform: translateY(0); }
+  .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* ===== BADGE ===== */
+  .platform-badge {
+    display: none;
+    margin-top: 14px;
+    font-size: .76rem;
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: rgba(124,58,237,.12);
+    border: 1px solid rgba(124,58,237,.35);
+    color: #c4b5fd;
+    width: fit-content;
+    font-weight: 600;
+    animation: popIn .4s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(.9) translateY(-4px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  /* ===== STATUS ===== */
+  .status { margin-top: 12px; font-size: .85rem; min-height: 18px; font-weight: 500; }
+  .status.error { color: var(--error); animation: shake .4s ease; }
+  .status.success { color: var(--success); }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  /* ===== LOADER ===== */
+  .loader {
+    display: none;
+    margin: 22px auto 0;
+    width: 44px; height: 44px;
+    position: relative;
+  }
+  .loader::before,
+  .loader::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 3px solid transparent;
+  }
+  .loader::before {
+    border-top-color: var(--accent);
+    border-right-color: var(--accent);
+    animation: spin .9s linear infinite;
+  }
+  .loader::after {
+    inset: 6px;
+    border-bottom-color: var(--accent-2);
+    border-left-color: var(--accent-2);
+    animation: spin 1.4s linear infinite reverse;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ===== RESULT ===== */
+  .result { display: none; margin-top: 28px; }
+  .result.show { animation: fadeUp .6s cubic-bezier(.2,.8,.2,1); }
+
+  .profile {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .profile img {
+    width: 62px; height: 62px;
+    border-radius: 14px;
+    object-fit: cover;
+    border: 2px solid var(--border);
+    background: var(--surface-2);
+    transition: transform .4s cubic-bezier(.2,.8,.2,1);
+    animation: popIn .5s cubic-bezier(.2,.8,.2,1);
+  }
+  .profile img:hover { transform: scale(1.08) rotate(-2deg); border-color: var(--accent); }
+  .profile .info h3 {
+    font-size: .97rem;
+    margin-bottom: 3px;
+    word-break: break-word;
+    font-weight: 700;
+  }
+  .profile .info p { font-size: .78rem; color: var(--muted); word-break: break-word; }
+
+  .title {
+    font-size: .88rem;
+    color: #c9c9d4;
+    margin-bottom: 18px;
+    line-height: 1.65;
+    max-height: 4.9em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ===== STATS ===== */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+  .stat {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 8px;
+    text-align: center;
+    transition: all .35s cubic-bezier(.2,.8,.2,1);
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp .5s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .stat:nth-child(1) { animation-delay: .05s; }
+  .stat:nth-child(2) { animation-delay: .1s; }
+  .stat:nth-child(3) { animation-delay: .15s; }
+  .stat:nth-child(4) { animation-delay: .2s; }
+  .stat:nth-child(5) { animation-delay: .25s; }
+  .stat:nth-child(6) { animation-delay: .3s; }
+
+  .stat::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    transform: scaleX(0);
+    transition: transform .4s cubic-bezier(.2,.8,.2,1);
+  }
+  .stat:hover { border-color: var(--border-hover); transform: translateY(-3px); }
+  .stat:hover::before { transform: scaleX(1); }
+
+  .stat .val {
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: var(--accent-2);
+    letter-spacing: -.02em;
+    transition: color .3s;
+  }
+  .stat:hover .val { color: #22d3ee; text-shadow: 0 0 20px rgba(6,182,212,.5); }
+  .stat .lbl {
+    font-size: .65rem;
+    color: var(--muted);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  /* ===== DOWNLOADS ===== */
+  .downloads h4 {
+    font-size: .88rem;
+    margin-bottom: 12px;
+    color: var(--text);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .downloads h4::before {
+    content: '';
+    width: 4px; height: 16px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, var(--accent), var(--accent-2));
+    box-shadow: 0 0 12px var(--glow-purple);
+  }
+
+  .dl-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .dl-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    transition: all .35s cubic-bezier(.2,.8,.2,1);
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp .5s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .dl-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--accent), var(--accent-2));
+    transform: scaleY(0);
+    transition: transform .35s;
+  }
+  .dl-item:hover {
+    border-color: var(--border-hover);
+    background: rgba(124,58,237,.06);
+    transform: translateX(4px);
+  }
+  .dl-item:hover::before { transform: scaleY(1); }
+
+  .dl-item .meta { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .dl-item .quality {
+    font-size: .88rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    word-break: break-word;
+    color: var(--text);
+  }
+  .dl-item .size { font-size: .73rem; color: var(--muted); font-weight: 500; }
+
+  .btn-dl {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: .8rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all .3s cubic-bezier(.2,.8,.2,1);
+    min-width: 92px;
+    text-align: center;
+    font-family: inherit;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-dl::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+    transition: left .5s;
+  }
+  .btn-dl:hover:not(:disabled)::before { left: 100%; }
+  .btn-dl:hover:not(:disabled) {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 24px rgba(124,58,237,.45);
+  }
+  .btn-dl:active:not(:disabled) { transform: translateY(0) scale(1); }
+  .btn-dl:disabled { opacity: .65; cursor: wait; }
+  .btn-dl.loading {
+    background: linear-gradient(135deg, #4b5563, #374151);
+    box-shadow: none;
+    animation: pulseBtn 1.5s ease-in-out infinite;
+  }
+  @keyframes pulseBtn {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .7; }
+  }
+
+  /* ===== WATERMARK ===== */
+  .watermark {
+    margin-top: 40px;
+    font-size: .82rem;
+    color: var(--muted);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    letter-spacing: .02em;
+    animation: fadeUp .8s .5s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .watermark .line {
+    width: 40px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+  .watermark strong {
+    background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-3));
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    animation: textShimmer 3s linear infinite;
+  }
+
+  .footer-note {
+    margin-top: 10px;
+    font-size: .72rem;
+    color: #4a4a5c;
+    text-align: center;
+    animation: fadeUp .8s .6s cubic-bezier(.2,.8,.2,1) both;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 520px) {
+    body { padding: 32px 14px 70px; }
+    .brand-text { font-size: 1.3rem; }
+    .card { padding: 22px 18px; border-radius: 20px; }
+    .input-group { flex-direction: column; background: transparent; border: none; padding: 0; gap: 10px; }
+    input[type="text"] {
+      background: rgba(6,6,10,.6);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    input[type="text"]:focus { border-color: var(--accent); }
+    .btn-primary { padding: 14px; border-radius: 12px; }
+    .stats { grid-template-columns: repeat(3, 1fr); }
+    .stat { padding: 10px 6px; }
+    .stat .val { font-size: .92rem; }
+    .dl-item { flex-direction: column; align-items: stretch; }
+    .btn-dl { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ANIMATED BG -->
+<div class="bg-canvas"></div>
+<div class="grid-overlay"></div>
+
+<!-- HEADER -->
+<div class="header-wrap">
+  <div class="brand">
+    <div class="brand-icon">⚡</div>
+    <div class="brand-text">Zen<span>Peak</span></div>
+  </div>
+  <p class="tagline">Universal Downloader<span class="dot"></span>Fast &amp; Reliable</p>
+</div>
+
+<!-- CHIPS -->
+<div class="chips">
+  <span class="chip">TikTok</span>
+  <span class="chip">Instagram</span>
+  <span class="chip">Facebook</span>
+  <span class="chip">Twitter / X</span>
+  <span class="chip">YouTube</span>
+  <span class="chip">Spotify</span>
+  <span class="chip">SoundCloud</span>
+  <span class="chip">Threads</span>
+  <span class="chip">Pinterest</span>
+  <span class="chip">Snack Video</span>
+  <span class="chip">CapCut</span>
+  <span class="chip">Douyin</span>
+  <span class="chip">Bilibili</span>
+  <span class="chip">Reddit</span>
+  <span class="chip">Dan lainnya</span>
+</div>
+
+<!-- MAIN CARD -->
+<div class="card">
+  <div class="input-group">
+    <input type="text" id="urlInput" placeholder="Tempel link dari platform apa saja..." autocomplete="off">
+    <button class="btn-primary" id="btnGo" onclick="fetchData()">Ambil Media</button>
+  </div>
+  <div class="platform-badge" id="platformBadge"></div>
+  <div class="status" id="status"></div>
+  <div class="loader" id="loader"></div>
+
+  <div class="result" id="result">
+    <div class="profile">
+      <img id="thumb" src="" alt="thumbnail" onerror="this.style.display='none'">
+      <div class="info">
+        <h3 id="authorName"></h3>
+        <p id="uniqueId"></p>
+      </div>
+    </div>
+    <p class="title" id="videoTitle"></p>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="downloads">
+      <h4 id="dlHeading">Pilih Media Unduhan</h4>
+      <div class="dl-list" id="dlList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- WATERMARK -->
+<div class="watermark">
+  <span class="line"></span>
+  Powered by <strong>ZenPeak</strong>
+  <span class="line"></span>
+</div>
+<p class="footer-note">API by Nexray · Untuk keperluan pribadi</p>
+
+<script>
+const API_BASE = "https://api.nexray.eu.cc/downloader/aio?url=";
+
+/* ===== PARTICLES ===== */
+(function spawnParticles() {
+  const count = window.innerWidth < 600 ? 12 : 22;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const colors = ['#7c3aed', '#06b6d4', '#f43f5e'];
+    p.style.background = colors[i % colors.length];
+    p.style.boxShadow = `0 0 10px ${colors[i % colors.length]}`;
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay = (-Math.random() * 20) + 's';
+    p.style.width = p.style.height = (2 + Math.random() * 3) + 'px';
+    document.body.appendChild(p);
+  }
+})();
+
+/* ===== DETECT PLATFORM ===== */
+function detectPlatform(url) {
+  const u = url.toLowerCase();
+  if (u.includes("tiktok")) return { name: "TikTok", emoji: "🎵" };
+  if (u.includes("instagram")) return { name: "Instagram", emoji: "📸" };
+  if (u.includes("facebook") || u.includes("fb.watch")) return { name: "Facebook", emoji: "👥" };
+  if (u.includes("twitter") || u.includes("x.com")) return { name: "Twitter / X", emoji: "🐦" };
+  if (u.includes("youtube") || u.includes("youtu.be")) return { name: "YouTube", emoji: "▶️" };
+  if (u.includes("spotify")) return { name: "Spotify", emoji: "🎧" };
+  if (u.includes("soundcloud")) return { name: "SoundCloud", emoji: "☁️" };
+  if (u.includes("threads")) return { name: "Threads", emoji: "🧵" };
+  if (u.includes("pinterest")) return { name: "Pinterest", emoji: "📌" };
+  if (u.includes("snackvideo") || u.includes("snack")) return { name: "Snack Video", emoji: "🍿" };
+  if (u.includes("capcut")) return { name: "CapCut", emoji: "🎬" };
+  if (u.includes("douyin")) return { name: "Douyin", emoji: "🇨🇳" };
+  if (u.includes("bilibili")) return { name: "Bilibili", emoji: "📺" };
+  if (u.includes("vimeo")) return { name: "Vimeo", emoji: "🎞️" };
+  if (u.includes("reddit")) return { name: "Reddit", emoji: "👽" };
+  return { name: "Platform", emoji: "🌐" };
+}
+
+/* ===== FETCH ===== */
+async function fetchData() {
+  const input = document.getElementById("urlInput");
+  const url = input.value.trim();
+  const btn = document.getElementById("btnGo");
+  const statusEl = document.getElementById("status");
+  const loader = document.getElementById("loader");
+  const resultEl = document.getElementById("result");
+  const badge = document.getElementById("platformBadge");
+
+  statusEl.className = "status";
+  statusEl.textContent = "";
+  resultEl.style.display = "none";
+  resultEl.classList.remove("show");
+  badge.style.display = "none";
+
+  if (!url) {
+    statusEl.classList.add("error");
+    statusEl.textContent = "⚠️ Masukkan link terlebih dahulu.";
+    return;
+  }
+
+  const plat = detectPlatform(url);
+  badge.textContent = `${plat.emoji} Terdeteksi: ${plat.name}`;
+  badge.style.display = "block";
+
+  btn.disabled = true;
+  loader.style.display = "block";
+
+  try {
+    const res = await fetch(API_BASE + encodeURIComponent(url));
+    if (!res.ok) throw new Error("HTTP " + res.status);
+
+    const data = await res.json();
+    if (!data.status || !data.result) throw new Error(data.message || "Gagal mengambil data.");
+
+    renderResult(data.result, plat);
+    statusEl.classList.add("success");
+    statusEl.textContent = `✅ Berhasil memuat data dari ${plat.name}.`;
+  } catch (err) {
+    console.error(err);
+    statusEl.classList.add("error");
+    statusEl.textContent = "❌ Error: " + err.message;
+  } finally {
+    btn.disabled = false;
+    loader.style.display = "none";
+  }
+}
+
+/* ===== DOWNLOAD ===== */
+async function downloadMedia(btn, url, filename) {
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.classList.add("loading");
+  btn.textContent = "Mengunduh...";
+
+  try {
+    const response = await fetch(url, { mode: "cors" });
+    if (!response.ok) throw new Error("HTTP " + response.status);
+
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = blobUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
+
+    btn.textContent = "✅ Terunduh";
+    btn.style.background = "linear-gradient(135deg,#10b981,#059669)";
+    btn.style.boxShadow = "0 8px 24px rgba(16,185,129,.4)";
+
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.style.background = "";
+      btn.style.boxShadow = "";
+      btn.disabled = false;
+      btn.classList.remove("loading");
+    }, 2000);
+  } catch (err) {
+    console.error(err);
+    btn.textContent = "Buka link";
+    btn.style.background = "linear-gradient(135deg,#f59e0b,#ef4444)";
+    setTimeout(() => {
+      window.open(url, "_blank");
+      btn.textContent = originalText;
+      btn.style.background = "";
+      btn.disabled = false;
+      btn.classList.remove("loading");
+    }, 800);
+  }
+}
+
+/* ===== RENDER ===== */
+function renderResult(r, plat) {
+  const resultEl = document.getElementById("result");
+
+  const thumbSrc = r.thumbnail || r.thumb || r.cover || r.image || r.picture || "";
+  const thumbEl = document.getElementById("thumb");
+  if (thumbSrc) { thumbEl.src = thumbSrc; thumbEl.style.display = "block"; }
+  else { thumbEl.style.display = "none"; }
+
+  const authorName = r.author || r.username || r.nickname || r.channel || r.uploader || "-";
+  const uniqueId = r.unique_id ? "@" + r.unique_id : (r.username ? "@" + r.username : "");
+  document.getElementById("authorName").textContent = authorName;
+  document.getElementById("uniqueId").textContent = uniqueId;
+
+  const title = r.title || r.caption || r.description || r.desc || "";
+  document.getElementById("videoTitle").textContent = title;
+  document.getElementById("videoTitle").style.display = title ? "block" : "none";
+
+  const s = r.statistics || r.stats || {};
+  const stats = [
+    { val: s.play_count ?? s.views ?? s.view, lbl: "Views" },
+    { val: s.digg_count ?? s.likes ?? s.like, lbl: "Likes" },
+    { val: s.comment_count ?? s.comments ?? s.comment, lbl: "Comments" },
+    { val: s.share_count ?? s.shares ?? s.share, lbl: "Shares" },
+    { val: s.collect_count ?? s.saves ?? s.save, lbl: "Saves" },
+    { val: s.download_count ?? s.downloads, lbl: "Downloads" }
+  ].filter(x => x.val !== undefined && x.val !== null);
+
+  const statsEl = document.getElementById("stats");
+  if (stats.length) {
+    statsEl.innerHTML = stats.map(x => `
+      <div class="stat">
+        <div class="val">${formatNum(x.val)}</div>
+        <div class="lbl">${x.lbl}</div>
+      </div>
+    `).join("");
+    statsEl.style.display = "grid";
+  } else statsEl.style.display = "none";
+
+  const medias = [];
+  if (Array.isArray(r.medias)) {
+    r.medias.forEach(m => medias.push({
+      url: m.url,
+      quality: m.quality || m.label || "media",
+      type: m.type || (m.extension === "mp3" ? "audio" : "video"),
+      extension: m.extension || "mp4",
+      size: m.data_size || m.size,
+      width: m.width, height: m.height
+    }));
+  }
+  if (r.video && typeof r.video === "string") medias.push({ url: r.video, quality: "video", type: "video", extension: "mp4" });
+  if (r.audio && typeof r.audio === "string") medias.push({ url: r.audio, quality: "audio", type: "audio", extension: "mp3" });
+  if (medias.length === 0 && r.url && typeof r.url === "string") {
+    const isAudio = r.url.includes(".mp3") || r.type === "audio";
+    medias.push({ url: r.url, quality: r.quality || "original", type: isAudio ? "audio" : "video", extension: isAudio ? "mp3" : "mp4" });
+  }
+  if (Array.isArray(r.download) || Array.isArray(r.downloads)) {
+    (r.download || r.downloads).forEach((d, i) => {
+      if (d.url) medias.push({
+        url: d.url,
+        quality: d.quality || d.label || `opsi ${i+1}`,
+        type: d.type || "video",
+        extension: d.extension || "mp4",
+        size: d.size || d.data_size
+      });
+    });
+  }
+
+  const list = document.getElementById("dlList");
+  const heading = document.getElementById("dlHeading");
+  list.innerHTML = "";
+
+  if (medias.length) {
+    heading.textContent = `Pilih Media Unduhan (${medias.length})`;
+    medias.forEach((m, idx) => {
+      if (!m.url) return;
+      const quality = (m.quality || "media").replace(/_/g, " ");
+      const typeLabel = m.type === "audio" ? "Audio" : "Video";
+      const ext = m.extension || (m.type === "audio" ? "mp3" : "mp4");
+      const sizeText = m.size ? formatSize(m.size) : ext.toUpperCase();
+      const safeName = (uniqueId || authorName || "media").replace(/[^a-z0-9]/gi, "_").substring(0, 20);
+      const safeQuality = (m.quality || "media").replace(/[^a-z0-9]/gi, "_");
+      const uniqueSuffix = (r.id || Date.now()).toString().slice(-8);
+      const filename = `${plat.name.toLowerCase()}_${safeName}_${safeQuality}_${uniqueSuffix}.${ext}`;
+
+      const item = document.createElement("div");
+      item.className = "dl-item";
+      item.style.animationDelay = (idx * 0.06) + "s";
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+      meta.innerHTML = `
+        <span class="quality">${quality} · ${typeLabel}</span>
+        <span class="size">${sizeText}${m.width ? ` · ${m.width}×${m.height}` : ""}</span>
+      `;
+
+      const btn = document.createElement("button");
+      btn.className = "btn-dl";
+      btn.textContent = "Unduh";
+      btn.onclick = () => downloadMedia(btn, m.url, filename);
+
+      item.appendChild(meta);
+      item.appendChild(btn);
+      list.appendChild(item);
+    });
+  } else {
+    heading.textContent = "Media";
+    list.innerHTML = '<p style="color:#8b8b9e;font-size:.85rem;">Tidak ada media yang tersedia.</p>';
+  }
+
+  resultEl.style.display = "block";
+  requestAnimationFrame(() => resultEl.classList.add("show"));
+  resultEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+/* ===== UTIL ===== */
+function formatNum(n) {
+  if (!n && n !== 0) return "-";
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(".0", "") + "M";
+  if (n >= 1_000) return (n / 1_000).toFixed(1).replace(".0", "") + "K";
+  return n.toString();
+}
+
+function formatSize(bytes) {
+  if (!bytes) return "";
+  const units = ["B", "KB", "MB", "GB"];
+  let i = 0, val = bytes;
+  while (val >= 1024 && i < units.length - 1) { val /= 1024; i++; }
+  return val.toFixed(1).replace(".0", "") + " " + units[i];
+}
+
+document.getElementById("urlInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") fetchData();
+});
+</script>
+</body>
+</html>
